@@ -26,11 +26,6 @@ export const verifyToken = async (req, res, next) => {
                 role: payload.role,
                 organization_id: payload.organization_id
             };
-
-            // Optional: verify user still exists in DB if critical
-            // const user = await User.findById(req.user.id);
-            // if (!user) return res.status(404).json({ message: "User not found" });
-
             next();
         });
     } catch (err) {

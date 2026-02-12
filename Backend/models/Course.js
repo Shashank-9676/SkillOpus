@@ -36,7 +36,7 @@ const courseSchema = new mongoose.Schema({
     },
     level: {
         type: String,
-        enum: ['Beginner', 'Intermediate', 'Advanced'], // Adjust based on actual data
+        enum: ['Beginner', 'Intermediate', 'Advanced'],
         default: 'Beginner'
     },
     instructor: {
@@ -50,9 +50,14 @@ const courseSchema = new mongoose.Schema({
         required: true
     },
     lessons: [lessonSchema],
-    created_by: { // Admin who created it
+    created_by: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    },
+    status: {
+        type: String,
+        enum: ['draft', 'active', 'archived'],
+        default: 'draft'
     },
     created_at: {
         type: Date,

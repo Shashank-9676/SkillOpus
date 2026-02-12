@@ -8,7 +8,6 @@ function FailureView() {
             <BookOpen className="w-8 h-8 text-red-600" />
           </div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Data</h2>
-          {/* <p className="text-gray-600 mb-4">{error}</p> */}
           <button 
             onClick={() => window.location.reload()}
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors"

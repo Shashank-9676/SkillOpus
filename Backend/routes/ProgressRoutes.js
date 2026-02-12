@@ -8,8 +8,8 @@ import { verifyToken } from '../middlewares/auth.js';
 
 const router = express.Router();
 
-router.post('/add', verifyToken, addProgress);
-router.get('/user/:user_id/lesson/:lesson_id', verifyToken, getProgressByUser);
-router.get('/user/:user_id/course/:course_id', verifyToken, getCourseProgress);
+router.post('/', verifyToken, addProgress);
+router.get('/lesson/:lesson_id/user/:user_id', verifyToken, getProgressByUser);
+router.get('/course/:course_id/user/:user_id', verifyToken, getCourseProgress);
 
 export default router;

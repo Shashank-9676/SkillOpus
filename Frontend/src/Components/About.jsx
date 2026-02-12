@@ -39,18 +39,9 @@ const About = () => {
     'Expert-led courses in various subjects',
     'Flexible learning at your own pace',
     'Interactive lessons',
-    // 'Certificates upon completion',
     'Community support and forums',
     'Regular content updates'
   ];
-
-  // const team = [
-  //   { name: 'Dr. Sarah Johnson', role: 'CEO & Founder', image: 'SJ' },
-  //   { name: 'Michael Chen', role: 'CTO', image: 'MC' },
-  //   { name: 'Emily Davis', role: 'Head of Education', image: 'ED' },
-  //   { name: 'James Wilson', role: 'Director of Operations', image: 'JW' }
-  // ];
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -164,30 +155,6 @@ const About = () => {
           </div>
         </div>
       </div>
-
-      {/* Team Section */}
-      {/* <div className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Passionate educators and innovators dedicated to transforming online learning.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="text-center">
-                <div className="w-32 h-32 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  {member.image}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">{member.name}</h3>
-                <p className="text-gray-600">{member.role}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div> */}
 
       {/* CTA Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">

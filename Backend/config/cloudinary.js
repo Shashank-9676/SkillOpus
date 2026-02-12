@@ -15,7 +15,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'skillopus-courses',
-        resource_type: 'video', // Explicitly state resource type for videos
+        resource_type: 'video',
         allowed_formats: ['mp4', 'mkv', 'avi', 'mov'],
     },
 });

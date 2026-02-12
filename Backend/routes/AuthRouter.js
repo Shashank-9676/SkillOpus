@@ -7,6 +7,6 @@ const router = express.Router();
 router.post('/register', register);
 router.post('/login', login);
 router.get('/profile', verifyToken, getProfile);
-router.get('/users', verifyToken, allUsers); // Admin only? Leaving as verifyToken for now
+router.get('/users', verifyToken, allUsers);
 
 export default router;

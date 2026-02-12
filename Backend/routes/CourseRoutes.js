@@ -11,7 +11,7 @@ router.get('/organization-courses', getCoursesOfOrganizations);
 router.get('/instructor/:id', verifyToken, getCourseByInstructor);
 router.get('/student/:id', verifyToken, getCourseByStudent);
 router.post('/', verifyToken, rbacMiddleware(['admin']), createCourse);
-router.put('/update/:id', verifyToken, updateCourse);
+router.put('/:id', verifyToken, updateCourse);
 router.delete('/delete/:id', verifyToken, deleteCourse);
 router.get('/:id', verifyToken, getCourseById);
 

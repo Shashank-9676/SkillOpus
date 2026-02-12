@@ -4,11 +4,9 @@ const lessonProgressSchema = new mongoose.Schema({
     lesson_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
-        // Note: We can't strictly ref a subdocument ID easily in Mongoose without it being a separate model, 
-        // but we store the ID here to match with Course.lessons._id
     },
     status: {
-        type: Boolean, // true for completed
+        type: Boolean,
         default: false
     },
     completed_at: {
@@ -44,7 +42,6 @@ const enrollmentSchema = new mongoose.Schema({
     progress: [lessonProgressSchema]
 });
 
-// Compound index to prevent duplicate enrollments
 enrollmentSchema.index({ student: 1, course: 1 }, { unique: true });
 
 const Enrollment = mongoose.model('Enrollment', enrollmentSchema);

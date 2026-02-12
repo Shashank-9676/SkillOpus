@@ -2,11 +2,8 @@ import Enrollment from '../models/Enrollment.js';
 import Course from '../models/Course.js';
 import User from '../models/User.js';
 
-// --- ENROLLMENT OPERATIONS ---
-
 export const getAllEnrollments = async (req, res) => {
     try {
-        // Fetch enrollments for organization
         const enrollments = await Enrollment.find({ organization: req.user.organization_id })
             .populate('student', 'username email user_type')
             .populate({
@@ -82,7 +79,6 @@ export const createEnrollment = async (req, res) => {
         const course = await Course.findById(course_id);
         if (!course) return res.status(400).json({ message: "Course not found" });
 
-        // Check duplicate
         const existing = await Enrollment.findOne({ student: user_id, course: course_id });
         if (existing) {
             return res.status(409).json({ message: "You are already enrolled in this course" });
@@ -143,22 +139,17 @@ export const deleteEnrollment = async (req, res) => {
     }
 };
 
-// --- PROGRESS OPERATIONS (Embedded in Enrollment) ---
 
 export const addProgress = async (req, res) => {
     try {
         const { user_id, lesson_id, status } = req.body;
-        // In SQL this was simpler because LessonProgress was separate.
-        // Here we need to find the ENROLLMENT for this user and the course that contains this lesson.
 
-        // Find course containing lesson
         const course = await Course.findOne({ "lessons._id": lesson_id });
         if (!course) return res.status(404).json({ message: "Course/Lesson not found" });
 
         const enrollment = await Enrollment.findOne({ student: user_id, course: course._id });
         if (!enrollment) return res.status(404).json({ message: "Enrollment not found" });
 
-        // Update progress
         const existingProgress = enrollment.progress.find(p => p.lesson_id.toString() === lesson_id);
         if (existingProgress) {
             return res.status(409).json({ message: 'You have already completed this lesson' });
@@ -166,7 +157,7 @@ export const addProgress = async (req, res) => {
 
         enrollment.progress.push({
             lesson_id: lesson_id,
-            status: status, // mapped to boolean/enum based on input? SQL input was 'status'.
+            status: status,
             completed_at: new Date()
         });
 
@@ -179,12 +170,9 @@ export const addProgress = async (req, res) => {
     }
 };
 
-// Get progress for a specific lesson for a user
 export const getProgressByUser = async (req, res) => {
     try {
         const { user_id, lesson_id } = req.params;
-
-        // Find course containing lesson first
         const course = await Course.findOne({ "lessons._id": lesson_id });
         if (!course) return res.status(200).send({ details: null }); // or 404
 
@@ -208,9 +196,6 @@ export const getCourseProgress = async (req, res) => {
         if (!course) return res.status(404).send({ message: 'Course not found' });
 
         const totalLessons = course.lessons.length;
-
-        // If instructor, show all students progress
-        // This check logic from original: if (course.instructor_id === Number(user_id))
         const isInstructor = (course.instructor.toString() === user_id);
 
         if (isInstructor) {
@@ -230,7 +215,6 @@ export const getCourseProgress = async (req, res) => {
 
             return res.status(200).send({ users: usersProgress });
         } else {
-            // Single user progress
             const enrollment = await Enrollment.findOne({ student: user_id, course: course_id });
             const completedCount = enrollment ? enrollment.progress.filter(p => p.status).length : 0;
             const percent = totalLessons === 0 ? 0 : Math.round((completedCount / totalLessons) * 100);

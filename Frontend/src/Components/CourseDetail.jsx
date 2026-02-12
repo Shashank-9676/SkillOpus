@@ -47,7 +47,6 @@ const CourseDetail = () => {
       if (response.ok){
         const data = await response.json()
         setProgress(data.details?.percent)
-        // console.log(data)
       }
     } catch (error) {
       toast.error("Error fetching Progress data")
@@ -67,7 +66,6 @@ const CourseDetail = () => {
       if (response.ok) {
         const data = await response.json();
         setCourseData(data.details);
-        // console.log(data)
       } else {
         console.error('Failed to fetch course data');
       }
@@ -201,7 +199,7 @@ const CourseDetail = () => {
             {lessons.length > 0 ? (
               <div className="space-y-4">
                 {lessons.map((lesson) => (
-                  <LessonCard key={lesson.lesson_id} lesson={lesson} />
+                  <LessonCard key={lesson._id} lesson={lesson} />
                 ))}
               </div>
             ) : (

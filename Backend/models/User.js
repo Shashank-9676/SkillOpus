@@ -32,11 +32,9 @@ const userSchema = new mongoose.Schema({
         ref: 'Organization',
         required: true
     },
-    // Instructor specific fields
     department: {
         type: String,
         trim: true,
-        // Only relevant if user_type is instructor
     },
     created_at: {
         type: Date,

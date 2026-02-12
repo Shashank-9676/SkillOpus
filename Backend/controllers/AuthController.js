@@ -68,14 +68,11 @@ export const login = async (req, res) => {
 
         const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-        // User object to return (exclude password)
         const userDetails = user.toObject();
         delete userDetails.password;
         if (user.organization) {
             userDetails.org_name = user.organization.name;
         }
-
-        // Return token in body, NO COOKIE as requested
         res.status(200).json({
             message: "Login success!",
             token: jwtToken,
@@ -109,7 +106,6 @@ export const getProfile = async (req, res) => {
 };
 
 
-// Additional helpers from original controller
 export const allUsers = async (req, res) => {
     try {
         const users = await User.find().select('-password');
@@ -117,5 +113,16 @@ export const allUsers = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Error fetching users" });
+    }
+};
+
+export const getAllInstructors = async (req, res) => {
+    try {
+        const instructors = await User.find({ user_type: 'instructor', organization: req.user.organization_id });
+        res.json({ details: instructors });
+
+    } catch (err) {
+        console.error("Error fetching instructors:", err);
+        res.status(500).json({ message: "Error fetching instructors" });
     }
 };

@@ -33,6 +33,3 @@ export const getOrganizationOptions = async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 };
-
-// Also exporting router here for simplicity? Or create separate file.
-// Let's create `routes/OptionsRoutes.js` to match structure.

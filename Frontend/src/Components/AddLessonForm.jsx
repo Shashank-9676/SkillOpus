@@ -11,7 +11,7 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
     created_by: created_by,
     video: null
   });
-  const [uploadType, setUploadType] = useState('youtube'); // 'youtube' or 'video'
+  const [uploadType, setUploadType] = useState('youtube');
 
     const handleAddLesson = async (e) => {
         e.preventDefault();
@@ -34,7 +34,6 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${Cookies.get('jwt_token')}`
-          // Content-Type header must be undefined for FormData to work correctly (boundary is set automatically)
         },
         body: formData,
       });
@@ -42,7 +41,6 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
         toast.error('Failed to add lesson');
         return;
       }else{
-        // const data = await response.json();
         setNewLesson({ title: '', description: '', type: 'video', duration: '', content: null });
         setShowAddLessonForm(false);
         toast.success('Lesson added successfully!');

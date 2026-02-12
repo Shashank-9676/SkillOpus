@@ -15,7 +15,7 @@ if (!isOpen || !lesson) return null;
         },
         body: JSON.stringify({
           user_id: userDetails.id,
-          lesson_id: lesson.lesson_id,
+          lesson_id: lesson._id,
           status: 1 ,
         })
       });

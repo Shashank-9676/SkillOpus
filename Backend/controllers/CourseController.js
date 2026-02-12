@@ -2,14 +2,17 @@ import Course from '../models/Course.js';
 import User from '../models/User.js';
 import Enrollment from '../models/Enrollment.js';
 
-// --- COURSE OPERATIONS ---
 
 export const getAllCourses = async (req, res) => {
     try {
         const organization_id = req.user.organization_id;
-        const courses = await Course.find({ organization: organization_id })
-            .populate('instructor', 'username')
-            .lean(); // Use lean for performance if we just need JSON
+        let query = { organization: organization_id };
+
+        if (req.user.role === 'student') {
+            query.status = 'active';
+        }
+
+        const courses = await Course.find(query).populate('instructor', 'username').lean();
 
         const formattedCourses = courses.map(course => ({
             ...course,
@@ -26,15 +29,8 @@ export const getAllCourses = async (req, res) => {
 
 export const getCoursesOfOrganizations = async (req, res) => {
     try {
-        // Group courses by organization. 
-        // Note: This endpoint title is a bit ambiguous in original code but seems to group all courses by org.
-        // Assuming this is for a super-admin or public view? The original code grouped by org.    
-
-        const courses = await Course.find().populate('organization', 'name').populate('instructor', 'username');
-
-        // Grouping logic (simplified match to original)
+        const courses = await Course.find({ status: 'active' }).populate('organization', 'name').populate('instructor', 'username');
         const orgMap = {};
-
         courses.forEach(c => {
             const orgId = c.organization._id.toString();
             if (!orgMap[orgId]) {
@@ -50,9 +46,10 @@ export const getCoursesOfOrganizations = async (req, res) => {
                 description: c.description,
                 category: c.category,
                 level: c.level,
-                instructor_id: c.instructor._id,
+                instructor_id: c.instructor ? c.instructor._id : null,
                 organization_id: c.organization._id,
-                organization_name: c.organization.name
+                organization_name: c.organization.name,
+                status: c.status
             });
         });
 
@@ -78,23 +75,22 @@ export const getCourseByInstructor = async (req, res) => {
 export const getCourseByStudent = async (req, res) => {
     const { id } = req.params;
     try {
-        // Find enrollments for this student and populate course details
-        const enrollments = await Enrollment.find({ student: id })
-            .populate({
-                path: 'course',
-                populate: { path: 'instructor', select: 'username' }
-            });
-
-        // Extract course details from enrollments to match original API structure
-        const courses = enrollments.map(e => e.course).filter(c => c !== null);
-
-        // Map to match SQL logic which joined users (instructor)
-        const result = courses.map(c => {
-            const obj = c.toObject();
-            // Original SQL returned everything from courses + instructor username/email etc
-            // We'll return the course object with embedded instructor info
-            return obj;
+        const enrollments = await Enrollment.find({ student: id }).populate({
+            path: 'course',
+            populate: { path: 'instructor', select: 'username' }
         });
+
+        const result = enrollments.map(e => {
+            if (!e.course) return null;
+            const courseObj = e.course.toObject();
+            if (courseObj.instructor && typeof courseObj.instructor === 'object') {
+                courseObj.instructor = courseObj.instructor.username;
+            }
+
+            courseObj.status = e.status;
+
+            return courseObj;
+        }).filter(c => c !== null);
 
         res.json({ details: result });
     } catch (error) {
@@ -105,7 +101,7 @@ export const getCourseByStudent = async (req, res) => {
 
 export const createCourse = async (req, res) => {
     try {
-        const { title, description, category, instructor_id, level, created_by } = req.body;
+        const { title, description, category, instructor_id, level, created_by, status } = req.body;
         const organization_id = req.user.organization_id;
 
         // Verify creator is admin
@@ -123,17 +119,11 @@ export const createCourse = async (req, res) => {
             instructor: instructor_id,
             organization: organization_id,
             created_by,
+            status: status || 'draft',
             lessons: []
         });
 
         const savedCourse = await newCourse.save();
-
-        // Update Instructor (User) with department if needed - In SQL there was `instructors` table update.
-        // In new schema, Instructor info is on User. 
-        // We might want to link the instructor? The schema has `instructor` ref in Course.
-        // If we strictly follow the new schema, there is no separate table to update. 
-        // But we might want to ensure the User is indeed an instructor.
-
         res.status(200).send({ message: "Course created successfully!", details: savedCourse });
     } catch (error) {
         console.error("Error creating course:", error);
@@ -171,8 +161,6 @@ export const updateCourse = async (req, res) => {
 export const deleteCourse = async (req, res) => {
     const { id } = req.params;
     try {
-        // Cascade delete enrollments?
-        // SQL did manual cascade. Mongo Mongoose middleware can do this, but manual is fine here.
         await Enrollment.deleteMany({ course: id });
 
         const result = await Course.findByIdAndDelete(id);
@@ -192,20 +180,26 @@ export const getCourseById = async (req, res) => {
     const { id } = req.params;
     try {
         const course = await Course.findById(id).populate('instructor', 'username');
-        if (course) {
-            const result = course.toObject();
-            result.instructor = course.instructor ? course.instructor.username : null;
-            res.json({ details: result });
-        } else {
-            res.status(404).json({ message: "Course not found" });
+
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
         }
+
+        // Restrict access for students if course is not active
+        if (req.user && req.user.role === 'student' && course.status !== 'active') {
+            return res.status(403).json({ message: "Access denied. Course is not active." });
+        }
+
+        const result = course.toObject();
+        result.instructor = course.instructor ? course.instructor.username : null;
+        res.json({ details: result });
+
     } catch (error) {
         console.error("Error fetching course:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
-// --- LESSON OPERATIONS (Embedded) ---
 
 export const createLesson = async (req, res) => {
     try {
@@ -231,7 +225,6 @@ export const createLesson = async (req, res) => {
         course.lessons.push(newLesson);
         await course.save();
 
-        // Get the last added lesson (it has an _id now)
         const addedLesson = course.lessons[course.lessons.length - 1];
 
         res.status(201).json({
@@ -247,7 +240,7 @@ export const createLesson = async (req, res) => {
 export const getLessonsByCourse = async (req, res) => {
     try {
         const { courseId } = req.params;
-        const course = await Course.findById({_id:courseId});
+        const course = await Course.findById({ _id: courseId });
         if (!course) {
             return res.status(404).json({ message: "Course not found" });
         }
@@ -260,8 +253,6 @@ export const getLessonsByCourse = async (req, res) => {
 
 export const getLessonById = async (req, res) => {
     try {
-        // Since lessons are embedded, we need to find the course containing this lesson.
-        // Or if we don't know the course ID, we search all courses (less efficient).
         const { id } = req.params;
 
         const course = await Course.findOne({ "lessons._id": id });
@@ -308,8 +299,7 @@ export const deleteLesson = async (req, res) => {
         if (!course) {
             return res.status(404).json({ message: "Lesson not found" });
         }
-
-        course.lessons.pull(id); // Mongoose method to remove subdoc
+        course.lessons.pull(id);
         await course.save();
 
         res.json({ message: "Lesson deleted successfully" });

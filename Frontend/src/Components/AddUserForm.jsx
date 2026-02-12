@@ -122,7 +122,6 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: null }));
     }
@@ -191,9 +190,6 @@ const AddUserPopup = ({ isOpen, onClose, onSave }) => {
                 </div>
               )}
             />
-            {/* Course Selection */}
-            {/* <CustomSelect options={options.courses} value={formData.course_id} onChange={(value) => handleInputChange('course_id', value)} placeholder="Select a course" label="Course (optional)" error={errors.course_id}/> */}
-            {/* Department Input */}
             <div className="relative p-4 rounded-lg">
               <label className="block text-sm font-medium text-gray-700 mb-2">Department <span className="text-red-500">*</span></label>
               <input type="text" value={formData.department || ''} onChange={e => handleInputChange('department', e.target.value)} placeholder="Enter department" className={`w-full px-4 py-3 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${errors.department ? 'border-red-300' : 'border-gray-300 hover:border-gray-400'}`}/>

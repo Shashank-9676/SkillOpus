@@ -7,13 +7,10 @@ export const getAdminStats = async (req, res) => {
         const organization_id = req.user.organization_id;
 
         const [totalUsers, totalCourses, activeUsers, pendingEnrollments] = await Promise.all([
-            // Distinct users enrolled? Or just total users in org?
-            // Original: SELECT COUNT(DISTINCT user_id) FROM enrollments WHERE organization_id = ?
-            User.countDocuments({ organization : organization_id }),
+            User.countDocuments({ organization: organization_id }),
 
-            Course.countDocuments({ organization : organization_id }),
+            Course.countDocuments({ organization: organization_id }),
 
-            // Active users in enrollments
             Enrollment.distinct('student', { status: 'active', organization: organization_id }),
 
             Enrollment.countDocuments({ status: 'pending', organization: organization_id })
@@ -23,7 +20,7 @@ export const getAdminStats = async (req, res) => {
             details: {
                 totalUsers,
                 totalCourses,
-                activeUsers : activeUsers.length,
+                activeUsers: activeUsers.length,
                 pendingEnrollments
             }
         });
@@ -37,14 +34,9 @@ export const getAdminStats = async (req, res) => {
 export const getInstructorStats = async (req, res) => {
     const instructorId = req.params.id;
     try {
-        // totalCourses by instructor
         const totalCourses = await Course.countDocuments({ instructor: instructorId });
-
-        // totalStudents (distinct) in these courses
-        // Find courses by instructor, then enrollments in those courses
         const courses = await Course.find({ instructor: instructorId }).select('_id');
         const courseIds = courses.map(c => c._id);
-
         const totalStudents = await Enrollment.distinct('student', { course: { $in: courseIds } });
 
         res.json({

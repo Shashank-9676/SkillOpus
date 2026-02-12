@@ -52,23 +52,12 @@ const Courses = () => {
 
   useEffect(() => {
     fetchCourses();
-  }, [userDetails]); // Reload when auth state changes
+  }, [userDetails]);
 
-  /* 
-    FilteredCourses structure depends on userDetails:
-    - Logged In: Array of Course Objects
-    - Not Logged In: Array of Organization Objects { organization_id, organization_name, courses: [] }
-  */
   const filterCourses = () => {
     if (!coursesData) return [];
     
-    // Check if it's the flat list (has 'title' property directly) or the grouped list (has 'courses' property)
-    // We can check the first item to decide the type, or based on userDetails.
-    const isFlatList = userDetails; // Simple proxy, but checking data is safer. 
-    // Actually, userDetails might be null but data empty.
-    
     if (userDetails) {
-        // Flat list behavior
         if (!Array.isArray(coursesData)) return [];
         let filtered = coursesData;
         if (searchTerm) {
@@ -80,10 +69,7 @@ const Courses = () => {
         }
         return filtered;
     } else {
-        // Grouped list behavior (Array of Orgs)
         if (!Array.isArray(coursesData)) return [];
-        
-        // Return a new array where each org's courses are filtered
         return coursesData.map(org => {
            const filteredOrgCourses = org.courses.filter(course => 
               course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -93,7 +79,7 @@ const Courses = () => {
              ...org,
              courses: filteredOrgCourses
            };
-        }).filter(org => org.courses.length > 0); // Remove orgs with no matching courses
+        }).filter(org => org.courses.length > 0);
     }
   };
 
@@ -104,9 +90,6 @@ if(loading){
       </div>
     );
 }
-
-// Check for empty data
-const isDataEmpty = coursesData.length === 0;
 
 if(!coursesData) {
     return <FailureView />;

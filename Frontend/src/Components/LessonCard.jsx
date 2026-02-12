@@ -31,7 +31,7 @@ const LessonCard = ({ lesson }) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/lessons/${lesson.lesson_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/lessons/${lesson._id}`, {
         method: "PUT",
         headers: { 
             "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const LessonCard = ({ lesson }) => {
         toast.error(err.message || "Failed to update lesson");
       }
       setIsEditing(false);
-      window.location.reload(); // Reload to reflect changes
+      window.location.reload();
     } catch (error) {
       console.log("Error updating lesson:", error);
       toast.error("Something went wrong");
@@ -79,7 +79,7 @@ const LessonCard = ({ lesson }) => {
   const fetchProgress = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/progress/lesson/${lesson.lesson_id}/user/${userDetails?.id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/progress/lesson/${lesson._id}/user/${userDetails?.id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -90,12 +90,11 @@ const LessonCard = ({ lesson }) => {
       if (response.ok) {
         setCompleted(data.details?.status);
       } else {
-        // silently fail or just log
-        // toast.error(data.message); 
+        toast.error(data.message); 
       }
-      setLoading(false);
     } catch (error) {
       console.error('Error fetching progress:', error);
+    }finally{
       setLoading(false);
     }
   };
@@ -106,7 +105,7 @@ const LessonCard = ({ lesson }) => {
     } else {
         setLoading(false);
     }
-  }, [lesson.lesson_id, completed, userDetails]);
+  }, [lesson._id, completed, userDetails]);
 
   const closeVideo = () => {
     setIsOpen(false);
@@ -121,7 +120,6 @@ const LessonCard = ({ lesson }) => {
     );
   }
 
-  // Determine icon based on type (simple check)
   const isVideo = lesson.type === 'video' || lesson.content_url?.includes('youtube') || lesson.content_url?.endsWith('.mp4');
 
   return (
