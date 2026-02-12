@@ -51,7 +51,16 @@ if (!isOpen || !lesson) return null;
 
         <div className="p-6">
           <div className="bg-black rounded-lg overflow-hidden mb-4">
-            <iframe width="100%" height="400" src={`https://www.youtube.com/embed/${lesson.content_url}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+            {lesson.content_url && (lesson.content_url.includes('http') || lesson.content_url.includes('cloudinary') || lesson.content_url.includes('/uploads')) ? (
+              <video 
+                src={lesson.content_url.startsWith('http') ? lesson.content_url : `${import.meta.env.VITE_API_URL}${lesson.content_url}`} 
+                controls 
+                className="w-full h-full object-contain bg-black"
+                style={{ maxHeight: '600px', width: '100%' }}
+              />
+            ) : (
+              <iframe width="100%" height="400" src={`https://www.youtube.com/embed/${lesson.content_url}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+            )}
           </div>
         </div>
 

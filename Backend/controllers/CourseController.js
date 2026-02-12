@@ -13,7 +13,8 @@ export const getAllCourses = async (req, res) => {
 
         const formattedCourses = courses.map(course => ({
             ...course,
-            instructor: course.instructor ? course.instructor.username : 'Unknown'
+            instructor: course.instructor ? course.instructor.username : 'Unknown',
+            instructor_id: course.instructor ? course.instructor._id : null
         }));
 
         res.status(200).json({ status: "success", details: formattedCourses });
@@ -108,6 +109,7 @@ export const createCourse = async (req, res) => {
         const organization_id = req.user.organization_id;
 
         // Verify creator is admin
+        console.log(created_by);
         const creator = await User.findById(created_by);
         if (!creator || creator.user_type !== 'admin') {
             return res.status(403).send({ message: "Only admins can create courses" });
@@ -121,7 +123,7 @@ export const createCourse = async (req, res) => {
             instructor: instructor_id,
             organization: organization_id,
             created_by,
-            lessons: [] // Initialize empty lessons array
+            lessons: []
         });
 
         const savedCourse = await newCourse.save();
@@ -141,11 +143,17 @@ export const createCourse = async (req, res) => {
 
 export const updateCourse = async (req, res) => {
     const { id } = req.params;
-    const { title, description } = req.body;
+    const { title, description, category, level, instructor_id, status } = req.body;
     try {
+        const updateData = { title, description };
+        if (category) updateData.category = category;
+        if (level) updateData.level = level;
+        if (instructor_id) updateData.instructor = instructor_id;
+        if (status) updateData.status = status;
+
         const course = await Course.findByIdAndUpdate(
             id,
-            { title, description },
+            updateData,
             { new: true }
         );
 
@@ -202,7 +210,12 @@ export const getCourseById = async (req, res) => {
 export const createLesson = async (req, res) => {
     try {
         const { courseId } = req.params;
-        const { title, content_url, created_by, lesson_order } = req.body;
+        const { title, lesson_order } = req.body;
+
+        let content_url = req.body.content_url;
+        if (req.file) {
+            content_url = req.file.path;
+        }
 
         const course = await Course.findById(courseId);
         if (!course) {
@@ -213,8 +226,6 @@ export const createLesson = async (req, res) => {
             title,
             content_url,
             lesson_order,
-            // created_by is not in simplified lesson schema, but we can access it via course logs or add it if needed.
-            // Keeping schema simple as defined in task.
         };
 
         course.lessons.push(newLesson);
@@ -236,7 +247,7 @@ export const createLesson = async (req, res) => {
 export const getLessonsByCourse = async (req, res) => {
     try {
         const { courseId } = req.params;
-        const course = await Course.findById(courseId);
+        const course = await Course.findById({_id:courseId});
         if (!course) {
             return res.status(404).json({ message: "Course not found" });
         }

@@ -4,45 +4,41 @@ import Cookies from 'js-cookie';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const storedUser = localStorage.getItem("userDetails");
+  const storedUser = Cookies.get("userDetails");
   const initialUser = storedUser ? JSON.parse(storedUser) : null;
 
   const [userDetails, setUserDetails] = useState(initialUser);
 
-  // Whenever userDetails changes, update localStorage
   useEffect(() => {
     if (userDetails) {
-      localStorage.setItem("userDetails", JSON.stringify(userDetails));
+      Cookies.set("userDetails", JSON.stringify(userDetails), { expires: 30, path: '/' });
     } else {
-      localStorage.removeItem("userDetails"); // clear if null
+      Cookies.remove("userDetails", { path: '/' });
     }
   }, [userDetails]);
 
-  // Check if token is valid on mount
   useEffect(() => {
      const checkAuth = async () => {
          if (userDetails) {
              try {
-                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/profile`, {
-                     headers: {
-                         'Authorization': `Bearer ${Cookies.get('jwt_token')}`
+                     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/profile`, {
+                         headers: {
+                             'Authorization': `Bearer ${Cookies.get('jwt_token')}`
+                         }
+                     });
+                     if (!response.ok) {
+                         setUserDetails(null);
+                         Cookies.remove("userDetails", { path: '/' });
+                         Cookies.remove("jwt_token", { path: '/' });
                      }
-                 });
-                 if (!response.ok) {
-                     // Token expired or invalid
-                     setUserDetails(null);
-                     localStorage.removeItem("userDetails");
-                 }
              } catch (error) {
                  console.error("Auth check failed:", error);
-                 // Optionally clear auth on connection error if stringent, but maybe safer to rely on status code
-                 // For now, only clear if we get a response indicating failure
-                 // setUserDetails(null); 
+                 setUserDetails(null); 
              }
          }
      };
      checkAuth();
-  }, []); // Run once on mount
+  }, []);
   return (
     <AuthContext.Provider value={{ userDetails, setUserDetails }}>
       {children}

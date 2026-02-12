@@ -11,7 +11,7 @@ const CreateCourse = ({ isOpen, onClose, onSave }) => {
     category: '',
     instructor_id: '',
     level: '',
-    status: 'draft',
+    status: 'Draft',
     created_by : userDetails?.id
   });
   const [error,setError] = useState(null);

@@ -222,7 +222,7 @@ const CourseDetail = () => {
         </div>
       </div>
       {/* Add Lesson Form Modal */}
-      {showAddLessonForm && <AddLessonForm setShowAddLessonForm={setShowAddLessonForm} id={id} created_by={userDetails.id} />}
+      {showAddLessonForm && <AddLessonForm setShowAddLessonForm={setShowAddLessonForm} id={id} />}
     </div>
   );
 };

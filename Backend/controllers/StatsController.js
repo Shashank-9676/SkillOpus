@@ -9,9 +9,9 @@ export const getAdminStats = async (req, res) => {
         const [totalUsers, totalCourses, activeUsers, pendingEnrollments] = await Promise.all([
             // Distinct users enrolled? Or just total users in org?
             // Original: SELECT COUNT(DISTINCT user_id) FROM enrollments WHERE organization_id = ?
-            Enrollment.distinct('student', { organization: organization_id }),
+            User.countDocuments({ organization : organization_id }),
 
-            Course.countDocuments({ organization: organization_id }),
+            Course.countDocuments({ organization : organization_id }),
 
             // Active users in enrollments
             Enrollment.distinct('student', { status: 'active', organization: organization_id }),
@@ -21,9 +21,9 @@ export const getAdminStats = async (req, res) => {
 
         res.json({
             details: {
-                totalUsers: totalUsers.length, // Count of distinct IDs
+                totalUsers,
                 totalCourses,
-                activeUsers: activeUsers.length,
+                activeUsers : activeUsers.length,
                 pendingEnrollments
             }
         });

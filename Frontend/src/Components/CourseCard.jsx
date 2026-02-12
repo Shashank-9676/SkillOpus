@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import CustomSelect from './CustomSelect';
 import {Trash2, Eye,Edit } from "lucide-react";
 import Cookies from 'js-cookie';
 import { useAuth } from "../context/AuthContext";
@@ -11,7 +12,29 @@ import { toast } from 'react-toastify';
     const [formData, setFormData] = useState({
     title: course.title,
     description: course.description,
+    instructor_id: course.instructor_id || "", 
   });
+  const [instructorOptions, setInstructorOptions] = useState([]);
+
+  const fetchInstructors = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/instructors`, {
+        headers: {
+          'Authorization': `Bearer ${Cookies.get('jwt_token')}`
+        }
+      });
+      const data = await response.json();
+      setInstructorOptions(data.details.map(inst => ({ value: inst.instructor_id, label: `${inst.username} - ${inst.department}` })));
+    } catch (err) {
+      console.error('Error fetching instructors:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (isEditing && userDetails?.role === 'admin') {
+      fetchInstructors();
+    }
+  }, [isEditing, userDetails]);
 
     const viewDetails  = () => {
       if(!userDetails) {
@@ -23,7 +46,7 @@ import { toast } from 'react-toastify';
         toast.error("You don't have access to view this course");
         return;
       }
-      navigate(`/course/${course.id}`);
+      navigate(`/course/${course._id}`);
     }
     const handleDeleteCourse = async () => {
       try {
@@ -194,6 +217,18 @@ import { toast } from 'react-toastify';
                   required
                 />
               </div>
+              {userDetails?.role === 'admin' && (
+                <div>
+                   <label className="block text-gray-700 mb-1">Instructor</label>
+                   <CustomSelect 
+                      options={instructorOptions} 
+                      value={formData.instructor_id} 
+                      onChange={(value) => setFormData({...formData, instructor_id: value})} 
+                      placeholder="Select Instructor" 
+                      label="Instructor" 
+                   />
+                </div>
+              )}
               <div className="flex justify-end gap-3 mt-4">
                 <button type="button" onClick={() => setIsEditing(false)} className="px-6 py-2 text-gray-600 bg-brown-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
                 <button type="submit" className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Save</button>

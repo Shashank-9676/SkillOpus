@@ -53,9 +53,10 @@ const Login = () => {
     const data = await response.json();
     if (response.ok) {
       setError(null);
-      Cookies.set('jwt_token', data.token, { expires: 7 }); // Store token
-      localStorage.setItem('userDetails', JSON.stringify({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name }));
-      setUserDetails({ id: data.details.id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name });
+      console.log(data);
+      Cookies.set('jwt_token', data.token, { expires: 7, path: '/' }); // Store token
+      Cookies.set('userDetails', JSON.stringify({ id: data.details._id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name }), { expires: 7, path: '/' }); // Store user details in cookie
+      setUserDetails({ id: data.details._id, username: data.details.username, email: data.details.email, role: data.details.user_type, organization: data.details.org_name });
       navigate('/',{ replace: true });
     } else {
       setError(data.message || 'Login failed');
@@ -87,7 +88,7 @@ const Login = () => {
       setError(data.message || 'Registration failed');
     }
   };
-  if (Cookies.get('jwt_token')) {
+  if (Cookies.get('jwt_token') && Cookies.get('userDetails')) {
     return <Navigate to="/" replace />;
   }
   return (
@@ -161,7 +162,7 @@ const Login = () => {
 
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-200 w-5 h-5" />
-                  <input required name='contact' type="tel" placeholder="Contact Number" value={registerData.contact} onChange={(e) => setRegisterData({...registerData, contact: e.target.value})} className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"/>
+                  <input required name='contact' type="tel" minLength={10} maxLength={10} placeholder="Contact Number" value={registerData.contact} onChange={(e) => setRegisterData({...registerData, contact: e.target.value})} className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300"/>
                 </div>
 
                 <div className="relative">
@@ -181,7 +182,7 @@ const Login = () => {
                 </div>
                 <div className="relative">
                   {/* <List className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-200 w-5 h-5 mr-10" /> */}
-                  <CustomSelect label="Select Organization" loading={loadingOrgs} options={organizations?.map(org => ({ value: org.id, label: org.name }))} value={registerData.organization_id} onChange={(value) => setRegisterData({ ...registerData, organization_id: value })} Color="blue"/>
+                  <CustomSelect label="Select Organization" loading={loadingOrgs} options={organizations?.map(org => ({ value: org._id, label: org.name }))} value={registerData.organization_id} onChange={(value) => setRegisterData({ ...registerData, organization_id: value })} Color="blue"/>
                 </div>
                 <div className="flex items-center">{error && <p className="text-red-500 text-sm ml-2">{error}</p>}</div>
                 <button type='submit' className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg">Create Account</button>

@@ -10,18 +10,10 @@ const Header = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const logout = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/logout`, {
-      method: 'POST',
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${Cookies.get('jwt_token')}` }
-    });
-    if(!response.ok) {
-      console.log("Error logging out");
-      return;
-    }
-    localStorage.removeItem('userDetails');
-    Cookies.remove('jwt_token');
+    Cookies.remove('userDetails', { path: '/' });
+    Cookies.remove('jwt_token', { path: '/' });
     navigate('/login')
+    window.location.reload();
   }
   const getNavItems = () => {
     const publicItems = [

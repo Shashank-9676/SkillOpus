@@ -22,7 +22,7 @@ const Courses = () => {
       const url = userDetails ? `${api}/courses` : `${api}/courses/organization-courses`;
       const token = Cookies.get('jwt_token');
       const response = await fetch(url, {
-         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+         headers: { 'Authorization': `Bearer ${token}` }
       });
       
       const data = await response.json();
@@ -35,9 +35,6 @@ const Courses = () => {
   const handleSave = async(courseData) => {
     const response = await fetch(`${api}/courses`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${Cookies.get('jwt_token')}`
@@ -181,7 +178,7 @@ if(!coursesData) {
               {userDetails ? (
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredCourses.map((course) => (
-                      <CourseCard key={course.id} course={course} />
+                      <CourseCard key={course._id} course={course} />
                     ))}
                  </div>
               ) : (

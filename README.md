@@ -1,6 +1,6 @@
 # SkillOpus
 
-Welcome to SkillOpus (formerly EduLearn).
+Welcome to SkillOpus
 
 This repository contains:
 - **Frontend**: The React-based user interface.

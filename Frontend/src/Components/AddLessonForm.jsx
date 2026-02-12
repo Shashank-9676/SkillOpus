@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, X, Save } from "lucide-react";
+import { Plus, X, Save, Upload, Youtube } from "lucide-react";
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
 
@@ -8,22 +8,35 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
     title: "",
     lesson_order: "",
     content_url: "",
-    created_by: created_by
+    created_by: created_by,
+    video: null
   });
+  const [uploadType, setUploadType] = useState('youtube'); // 'youtube' or 'video'
+
     const handleAddLesson = async (e) => {
         e.preventDefault();
-    if (!newLesson.title || !newLesson.content_url) {
+    if (!newLesson.title) {
       toast.warning('Please fill all required fields');
       return;
     }
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/${id}/lessons`, {
+      const formData = new FormData();
+      formData.append('title', newLesson.title);
+      formData.append('lesson_order', newLesson.lesson_order);
+      
+      if (uploadType === 'video' && newLesson.video) {
+        formData.append('video', newLesson.video);
+      } else {
+        formData.append('content_url', newLesson.content_url);
+      }
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/${id}/lessons/add`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${Cookies.get('jwt_token')}`
+          // Content-Type header must be undefined for FormData to work correctly (boundary is set automatically)
         },
-        body: JSON.stringify(newLesson),
+        body: formData,
       });
       if (!response.ok) {
         toast.error('Failed to add lesson');
@@ -46,6 +59,10 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewLesson((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    setNewLesson((prev) => ({ ...prev, video: e.target.files[0] }));
   };
 
 
@@ -81,8 +98,37 @@ const AddLessonForm = ({ setShowAddLessonForm, id, created_by }) => {
               <input type="number" name="lesson_order" value={newLesson.lesson_order} onChange={handleChange} placeholder="Enter lesson order" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Content Code *</label>
-              <input required type="text" name="content_url" value={newLesson.content_url} onChange={handleChange} placeholder="Enter content URL Code" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label className="block text-sm font-medium text-gray-700 mb-2">Content Type</label>
+              <div className="flex space-x-2 mb-2">
+                <button 
+                  type="button" 
+                  onClick={() => setUploadType('youtube')}
+                  className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-center space-x-2 border ${uploadType === 'youtube' ? 'bg-red-50 border-red-200 text-red-700' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                >
+                  <Youtube className="w-4 h-4" />
+                  <span>YouTube</span>
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setUploadType('video')}
+                  className={`flex-1 py-2 px-3 rounded-lg flex items-center justify-center space-x-2 border ${uploadType === 'video' ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                >
+                  <Upload className="w-4 h-4" />
+                  <span>Upload</span>
+                </button>
+              </div>
+
+              {uploadType === 'youtube' ? (
+                <div>
+                  <input required={uploadType === 'youtube'} type="text" name="content_url" value={newLesson.content_url} onChange={handleChange} placeholder="Enter YouTube Video ID (e.g. dQw4w9WgXcQ)" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <p className="text-xs text-gray-500 mt-1">Found after v= in URL</p>
+                </div>
+              ) : (
+                <div>
+                   <input required={uploadType === 'video'} type="file" accept="video/*" onChange={handleFileChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                   <p className="text-xs text-gray-500 mt-1">Supports MP4, AVI, MOV</p>
+                </div>
+              )}
             </div>
           </div>
 

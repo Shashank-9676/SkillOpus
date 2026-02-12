@@ -4,7 +4,7 @@ import { verifyToken } from '../middlewares/auth.js';
 
 const router = express.Router();
 
-router.get('/enrollment', verifyToken, getEnrollmentOptions);
-router.get('/organizations', getOrganizationOptions); // Public? Or protected? Original didn't seem to check org_id for listing all orgs.
+router.get('/enrollment-options', verifyToken, getEnrollmentOptions);
+router.get('/organizations', getOrganizationOptions);
 
 export default router;
