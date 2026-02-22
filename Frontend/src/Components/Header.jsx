@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  BarChart3,
-  Menu,
-  X,
-  Mail,
-  LogIn,
-  LogOut,
-  BookOpen,
-  Users,
-} from "lucide-react";
+import { BarChart3, Menu, X, Mail, LogIn, LogOut, BookOpen, Users, Building2, } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link, useLocation } from "react-router";
 import Cookies from "js-cookie";
@@ -29,26 +20,17 @@ const Header = () => {
   };
 
   const getNavItems = () => {
-    const publicItems = [
-      { label: "All Courses", icon: BookOpen, href: "/courses" },
-      { label: "About Us", icon: Users, href: "/about" },
-      { label: "Contact Us", icon: Mail, href: "/contact" },
-    ];
+    const dashboardItem = { label: "Dashboard", icon: BarChart3, href: "/" };
+    const coursesItem = {label: "All Courses",icon: BookOpen,href: "/courses",};
+    const contactItem = { label: "Contact Us", icon: Mail, href: "/contact" };
+    const aboutItem = { label: "About Us", icon: Users, href: "/about" };
+    const orgItem = { label: "Organizations", icon: Building2, href: "/organizations" };
 
     if (!userDetails) {
-      return publicItems;
+      return [orgItem, aboutItem, contactItem];
     }
 
-    const dashboardItem = { label: "Dashboard", icon: BarChart3, href: "/" };
-
-    switch (userDetails.role) {
-      case "admin":
-      case "instructor":
-      case "student":
-        return [dashboardItem, ...publicItems];
-      default:
-        return publicItems;
-    }
+    return [dashboardItem, coursesItem, contactItem, aboutItem];    
   };
 
   const navItems = getNavItems();

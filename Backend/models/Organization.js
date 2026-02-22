@@ -11,6 +11,11 @@ const organizationSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  secret_code: {
+    type: String,
+    trim: true,
+    default: ''
+  },
   created_at: {
     type: Date,
     default: Date.now

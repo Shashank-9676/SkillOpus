@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { BookOpen } from "lucide-react";
-import StatCard from "./StarCard";
+import StatCard from "./StatCard";
 import CourseCard from "./CourseCard";
 import SyncLoader from "react-spinners/SyncLoader";
 import { useAuth } from "../context/AuthContext";
@@ -19,7 +19,6 @@ const StudentDashboard = () => {
 
   const fetchMyCourses = async () => {
     try {
-      // setLoading(true); // Don't trigger full reload on update
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/courses/student/${userDetails.id}`,
         {
@@ -84,24 +83,26 @@ const StudentDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back,{" "}
-                <span className="text-blue-600">{userDetails.username}</span>!
-              </h1>
-              <p className="text-gray-600 mt-2 text-lg">
-                Track your progress and continue learning.
-              </p>
-            </motion.div>
-          </div>
+    <div className="min-h-screen bg-gray-50 pb-16">
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600">
+        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5" />
+        <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <p className="text-blue-100 text-sm font-medium mb-1 uppercase tracking-widest">
+              Student Dashboard
+            </p>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">
+              Welcome back, {userDetails.username}! 👋
+            </h1>
+            <p className="text-blue-100 mt-2 text-base">
+              Track your progress and continue learning.
+            </p>
+          </motion.div>
         </div>
       </div>
 
@@ -117,12 +118,10 @@ const StudentDashboard = () => {
             icon={BookOpen}
             title="Enrolled Courses"
             value={studentStats.totalCourses}
-            color="bg-blue-500"
+            color="blue"
           />
-          {/* Add more stats here if available, e.g., Completed Courses, Certificates */}
         </motion.div>
 
-        {/* My Courses Section */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-900">

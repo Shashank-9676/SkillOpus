@@ -1,186 +1,192 @@
-import React, { useEffect, useState } from 'react';
-import { BookOpen, Plus, Search } from 'lucide-react';
-import Cookies from 'js-cookie';
-import Header from './Header';
-import CourseCard from './CourseCard';
-import CreateCourseForm from './AddCourseForm';
-import { useAuth } from '../context/AuthContext';
-import { toast } from 'react-toastify';
-import SyncLoader from 'react-spinners/SyncLoader';
-import FailureView from './FailureView';
+import { useEffect, useState } from "react";
+import { BookOpen, Plus, Search } from "lucide-react";
+import Cookies from "js-cookie";
+import Header from "./Header";
+import CourseCard from "./CourseCard";
+import CreateCourseForm from "./AddCourseForm";
+import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
+import SyncLoader from "react-spinners/SyncLoader";
+import { motion } from "framer-motion";
+
 const api = import.meta.env.VITE_API_URL;
+
 const Courses = () => {
-  const {userDetails} = useAuth()
-  const [searchTerm, setSearchTerm] = useState('');
-  const [coursesData, setCoursesData] = useState([]);
+  const { userDetails } = useAuth();
+  const [courses, setCourses] = useState([]);
+  const [search, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-    const fetchCourses = async () => {
-    try 
-    {
+
+  const fetchCourses = async () => {
+    try {
       setLoading(true);
-      const url = userDetails ? `${api}/courses` : `${api}/courses/organization-courses`;
-      const token = Cookies.get('jwt_token');
-      const response = await fetch(url, {
-         headers: { 'Authorization': `Bearer ${token}` }
+      const res = await fetch(`${api}/courses`, {
+        headers: { Authorization: `Bearer ${Cookies.get("jwt_token")}` },
       });
-      
-      const data = await response.json();
-      setCoursesData(data.details);
+      const data = await res.json();
+      setCourses(data.details || []);
+    } catch (err) {
+      console.error("Error fetching courses:", err);
+    } finally {
       setLoading(false);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
     }
   };
-  const handleSave = async(courseData) => {
-    const response = await fetch(`${api}/courses`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${Cookies.get('jwt_token')}`
-      },
-      body: JSON.stringify(courseData),
-    });
-    if(!response.ok) {
-      console.log("Error creating course");
-      return;
+
+  const handleSave = async (courseData) => {
+    try {
+      const res = await fetch(`${api}/courses`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("jwt_token")}`,
+        },
+        body: JSON.stringify(courseData),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(data.message || "Course created successfully!");
+        fetchCourses();
+      } else {
+        toast.error(data.message || "Failed to create course.");
+      }
+    } catch (err) {
+      toast.error("Network error — could not create course.");
     }
-    const data = await response.json();
-    toast.success(data.message || "Course created successfully!")
-    fetchCourses();
   };
 
   useEffect(() => {
     fetchCourses();
-  }, [userDetails]);
+  }, []);
 
-  const filterCourses = () => {
-    if (!coursesData) return [];
-    
-    if (userDetails) {
-        if (!Array.isArray(coursesData)) return [];
-        let filtered = coursesData;
-        if (searchTerm) {
-          filtered = filtered.filter(course =>
-            course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (course.instructor && course.instructor.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            course.category.toLowerCase().includes(searchTerm.toLowerCase())
-          );
-        }
-        return filtered;
-    } else {
-        if (!Array.isArray(coursesData)) return [];
-        return coursesData.map(org => {
-           const filteredOrgCourses = org.courses.filter(course => 
-              course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              course.category.toLowerCase().includes(searchTerm.toLowerCase())
-           );
-           return {
-             ...org,
-             courses: filteredOrgCourses
-           };
-        }).filter(org => org.courses.length > 0);
-    }
-  };
+  const filtered = courses.filter(
+    (c) =>
+      c.title?.toLowerCase().includes(search.toLowerCase()) ||
+      c.category?.toLowerCase().includes(search.toLowerCase()),
+  );
 
-if(loading){
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <SyncLoader color="#333333" size={15} />
+        <SyncLoader color="#3B82F6" size={15} margin={5} />
       </div>
     );
-}
-
-if(!coursesData) {
-    return <FailureView />;
   }
-  const filteredCourses = filterCourses();
-  const isFilteredEmpty = filteredCourses.length === 0;
-  
+
+  const isAdmin = userDetails?.role === "admin";
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-16">
       <Header />
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Courses</h1>
-                <p className="text-gray-600 mt-1">Manage and create courses for your students</p>
-              </div>
-              {userDetails?.role == 'admin' && (
-                <button onClick={() => setIsOpen(!isOpen)} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 px-6 rounded-lg font-medium transition-all flex items-center">
-                  <Plus className="w-5 h-5 mr-2" />
-                  Create Course
-                </button>
-              )}
-              <CreateCourseForm isOpen={isOpen} onClose={() => setIsOpen(false)} onSave={handleSave}/>
-            </div>
+
+      {/* Hero banner */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-blue-600 to-blue-500">
+        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5" />
+        <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <p className="text-blue-100 text-sm font-medium uppercase tracking-widest mb-1">
+                Library
+              </p>
+              <h1 className="text-3xl md:text-4xl font-bold text-white">
+                All Courses
+              </h1>
+              <p className="text-blue-100 mt-2 text-base">
+                Browse and manage courses in your organisation.
+              </p>
+            </motion.div>
+
+            {isAdmin && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setIsOpen(true)}
+                className="flex items-center gap-2 bg-white text-blue-700 font-semibold px-6 py-3 rounded-xl shadow-lg hover:bg-blue-50 transition-all self-start"
+              >
+                <Plus className="w-5 h-5" />
+                Create Course
+              </motion.button>
+            )}
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters and Search */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-            {/* Search Bar */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input type="text" placeholder="Search courses, categories..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
-            </div>
-          </div>
+        {/* Search bar */}
+        <div className="relative max-w-md mb-8">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search by title or category…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm transition"
+          />
         </div>
 
-        {/* Courses Content */}
-        {isFilteredEmpty ? (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-            <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No courses found</h3>
-            <p className="text-gray-500 mb-6">
-              {searchTerm ? 'Try adjusting your search terms' : 'Get started by creating your first course'}
+        {/* Count */}
+        <p className="text-sm text-gray-500 mb-6">
+          {filtered.length} course{filtered.length !== 1 ? "s" : ""} found
+          {search && ` for "${search}"`}
+        </p>
+
+        {/* Grid */}
+        {filtered.length === 0 ? (
+          <div className="text-center py-24 bg-white rounded-2xl border border-gray-100">
+            <BookOpen className="w-14 h-14 text-gray-200 mx-auto mb-4" />
+            <p className="text-lg font-semibold text-gray-400">
+              No courses found
             </p>
-            {userDetails?.role == 'admin' && <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium transition-colors flex items-center mx-auto" onClick={() => setIsOpen(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              Create Course
-            </button>}
+            <p className="text-gray-400 text-sm mt-1">
+              {search
+                ? "Try a different search term."
+                : "No courses available yet."}
+            </p>
+            {isAdmin && (
+              <button
+                onClick={() => setIsOpen(true)}
+                className="mt-5 inline-flex items-center gap-2 bg-blue-600 text-white font-medium px-6 py-2.5 rounded-xl hover:bg-blue-700 transition-all"
+              >
+                <Plus className="w-4 h-4" /> Create First Course
+              </button>
+            )}
           </div>
         ) : (
-          <>
-            {/* Results Count */}
-            <div className="mb-6">
-              <p className="text-sm text-gray-600">
-               {/* Simplified count for now */}
-               {userDetails ? 
-                `Showing ${filteredCourses.length} courses` : 
-                `Showing courses across ${filteredCourses.length} organizations`
-               }
-              </p>
-            </div>             
-             
-              {userDetails ? (
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredCourses.map((course) => (
-                      <CourseCard key={course._id} course={course} />
-                    ))}
-                 </div>
-              ) : (
-                <div className="space-y-8">
-                    {filteredCourses.map((org) => (
-                        <div key={org.organization_id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">{org.organization_name}</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {org.courses.map((course) => (
-                                    <CourseCard key={course.id} course={course} />
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-              )}
-          </>
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.07 } },
+            }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {filtered.map((course) => (
+              <motion.div
+                key={course._id}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+              >
+                <CourseCard course={course} onCourseUpdate={fetchCourses} />
+              </motion.div>
+            ))}
+          </motion.div>
         )}
       </div>
+
+      <CreateCourseForm
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onSave={handleSave}
+      />
     </div>
   );
 };

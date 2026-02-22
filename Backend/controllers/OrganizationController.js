@@ -3,7 +3,7 @@ import Organization from '../models/Organization.js';
 
 export const createOrganization = async (req, res) => {
     try {
-        const { name, description } = req.body;
+        const { name, description, secret_code } = req.body;
 
         if (!name) {
             return res.status(400).json({ message: "Organization name is required" });
@@ -14,11 +14,7 @@ export const createOrganization = async (req, res) => {
             return res.status(400).json({ message: "Organization already exists" });
         }
 
-        const newOrg = new Organization({
-            name,
-            description
-        });
-
+        const newOrg = new Organization({ name, description, secret_code });
         await newOrg.save();
 
         res.status(201).json({ message: "Organization created successfully", details: newOrg });
@@ -30,7 +26,7 @@ export const createOrganization = async (req, res) => {
 
 export const getAllOrganizations = async (req, res) => {
     try {
-        const organizations = await Organization.find().select('id name');
+        const organizations = await Organization.find().select('id name description created_at');
         res.status(200).json({ details: organizations });
     } catch (error) {
         console.error("Error fetching organizations:", error);

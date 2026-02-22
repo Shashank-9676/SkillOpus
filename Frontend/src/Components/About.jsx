@@ -6,9 +6,9 @@ const About = () => {
   const navigate = useNavigate()
   
   const stats = [
-    { icon: Users, value: '10,000+', label: 'Active Students' },
-    { icon: BookOpen, value: '500+', label: 'Courses' },
-    { icon: Award, value: '50+', label: 'Expert Instructors' },
+    { icon: Users, value: '100+', label: 'Active Students' },
+    { icon: BookOpen, value: '50+', label: 'Courses' },
+    { icon: Award, value: '5+', label: 'Expert Instructors' },
     { icon: Star, value: '4.8', label: 'Average Rating' }
   ];
 

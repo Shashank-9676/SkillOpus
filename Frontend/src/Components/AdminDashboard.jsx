@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { Users, BookOpen, UserPlus, Clock, Activity } from "lucide-react";
+import { Users, BookOpen, Clock, Activity } from "lucide-react";
 import UserRow from "./UserRow";
-import AddUserPopup from "./AddUserForm";
-import StatCard from "./StarCard";
+import StatCard from "./StatCard";
 import SyncLoader from "react-spinners/SyncLoader";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -15,31 +15,8 @@ const AdminDashboard = () => {
     pendingEnrollments: 0,
   });
   const [loading, setLoading] = useState(true);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [users, setUsers] = useState([]);
   const [pendingEnrollments, setPendingEnrollments] = useState([]);
-
-  const handleSaveUser = async (userData) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/instructors`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("jwt_token")}`,
-          },
-          body: JSON.stringify(userData),
-        },
-      );
-      const data = await response.json();
-      console.log("Response from server:", data);
-      fetchEnrollments();
-      setIsPopupOpen(false);
-    } catch (err) {
-      console.error("Error saving user:", err);
-    }
-  };
 
   const fetchEnrollmentsCounts = async () => {
     try {
@@ -92,24 +69,26 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-3xl font-bold text-gray-900">
-                Admin Dashboard
-              </h1>
-              <p className="text-gray-600 mt-2 text-lg">
-                Manage your learning management system
-              </p>
-            </motion.div>
-          </div>
+    <div className="min-h-screen bg-gray-50 pb-16">
+      <div className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900">
+        <div className="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-white/5" />
+        <div className="absolute -bottom-12 -left-12 w-52 h-52 rounded-full bg-white/5" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <p className="text-gray-400 text-sm font-medium mb-1 uppercase tracking-widest">
+              Admin Dashboard
+            </p>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">
+              Control Center ⚙️
+            </h1>
+            <p className="text-gray-400 mt-2 text-base">
+              Manage your learning management system.
+            </p>
+          </motion.div>
         </div>
       </div>
 
@@ -125,25 +104,25 @@ const AdminDashboard = () => {
             icon={Users}
             title="Total Users"
             value={stats?.totalUsers || 0}
-            color="bg-blue-500"
+            color="blue"
           />
           <StatCard
             icon={BookOpen}
             title="Total Courses"
             value={stats?.totalCourses || 0}
-            color="bg-green-500"
+            color="green"
           />
           <StatCard
             icon={Activity}
             title="Active Users"
             value={stats?.activeUsers || 0}
-            color="bg-purple-500"
+            color="purple"
           />
           <StatCard
             icon={Clock}
-            title="Pending Enrollments"
+            title="Pending"
             value={stats?.pendingEnrollments || 0}
-            color="bg-orange-500"
+            color="orange"
           />
         </motion.div>
 
@@ -210,18 +189,6 @@ const AdminDashboard = () => {
           >
             <div className="px-6 py-5 border-b border-gray-200 flex items-center justify-between bg-gray-50/50">
               <h2 className="text-xl font-bold text-gray-900">Users</h2>
-              <button
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-xl font-medium transition-all shadow-sm hover:shadow active:scale-95 flex items-center"
-                onClick={() => setIsPopupOpen(true)}
-              >
-                <UserPlus className="w-4 h-4 mr-2" />
-                Add Instructor
-              </button>
-              <AddUserPopup
-                isOpen={isPopupOpen}
-                onClose={() => setIsPopupOpen(false)}
-                onSave={handleSaveUser}
-              />
             </div>
             <div className="p-0">
               {users?.length > 0 ? (

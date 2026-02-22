@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import {  Users,   Search,   BookOpen,  CheckCircle,  Clock,  TrendingUp,User,  Mail,  Eye,  Award} from 'lucide-react';
 import {useParams} from 'react-router'
-import StatCard from './StarCard';
+import StatCard from './StatCard';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import Header from './Header'

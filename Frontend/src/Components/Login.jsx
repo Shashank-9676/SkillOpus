@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { User, Lock, Mail, Eye, EyeOff, Phone } from "lucide-react";
+import { User, Lock, Mail, Eye, EyeOff, Phone, Shield } from "lucide-react";
 import { useNavigate, Navigate } from "react-router";
 import { useAuth } from "../context/AuthContext.jsx";
 import { toast } from "react-toastify";
@@ -26,7 +26,13 @@ const Login = () => {
     password: "",
     confirmPassword: "",
     organization_id: "",
+    user_type: "student",
+    secret_code: "",
   });
+
+  const needsSecretCode = ["admin", "instructor"].includes(
+    registerData.user_type,
+  );
 
   useEffect(() => {
     const fetchOrganizations = async () => {
@@ -105,6 +111,8 @@ const Login = () => {
             contact: registerData.contact,
             password: registerData.password,
             organization_id: registerData.organization_id,
+            user_type: registerData.user_type,
+            secret_code: registerData.secret_code,
           }),
         },
       );
@@ -275,23 +283,6 @@ const Login = () => {
                         </button>
                       </div>
                     </div>
-
-                    <div className="flex justify-between items-center text-sm">
-                      <label className="flex items-center space-x-2 text-gray-600">
-                        <input
-                          type="checkbox"
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                        />
-                        <span>Remember me</span>
-                      </label>
-                      <a
-                        href="#"
-                        className="text-blue-600 hover:text-blue-700 font-medium"
-                      >
-                        Forgot password?
-                      </a>
-                    </div>
-
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -405,6 +396,53 @@ const Login = () => {
                         />
                       </div>
                     </div>
+                    {/* Role Selector */}
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+                        Register as
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {["student", "instructor", "admin"].map((role) => (
+                          <button
+                            key={role}
+                            type="button"
+                            onClick={() =>
+                              setRegisterData({
+                                ...registerData,
+                                user_type: role,
+                                secret_code: "",
+                              })
+                            }
+                            className={`py-2 rounded-xl text-sm font-semibold capitalize border transition-all ${
+                              registerData.user_type === role
+                                ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                                : "bg-gray-50 text-gray-500 border-gray-200 hover:border-blue-300"
+                            }`}
+                          >
+                            {role}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Organization Code */}
+                    <div className="relative">
+                      <Shield className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 w-5 h-5" />
+                      <input
+                        type="password"
+                        placeholder="Organization code (if required)"
+                        value={registerData.secret_code}
+                        onChange={(e) =>
+                          setRegisterData({
+                            ...registerData,
+                            secret_code: e.target.value,
+                          })
+                        }
+                        className="w-full pl-10 pr-4 py-3 bg-orange-50 border border-orange-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:bg-white transition-all text-sm"
+                      />
+                    </div>
+
+                    {/* Organization */}
                     <div>
                       <CustomSelect
                         label="Select Organization"
@@ -420,7 +458,7 @@ const Login = () => {
                             organization_id: value,
                           })
                         }
-                        Color="blue"
+                        Color="default"
                       />
                     </div>
 
@@ -439,10 +477,7 @@ const Login = () => {
               <div className="mt-8 text-center">
                 <p className="text-gray-500 text-sm">
                   Need help?{" "}
-                  <a
-                    href="mailto:support@skillopus.com"
-                    className="text-blue-600 hover:underline"
-                  >
+                  <a href="/contact" className="text-blue-600 hover:underline">
                     Contact Support
                   </a>
                 </p>

@@ -5,22 +5,25 @@ import Organization from '../models/Organization.js';
 
 export const register = async (req, res) => {
     try {
-        const { username, password, email, user_type = "student", contact, organization_id, department } = req.body;
+        const { username, password, email, user_type = 'student', contact, organization_id, department, secret_code } = req.body;
 
-        // Check user existence
         const existingUser = await User.findOne({ $or: [{ email }, { username }] });
         if (existingUser) {
             return res.status(400).json({ message: "User (email or username) already exists" });
         }
 
         if (password.length < 5) {
-            return res.status(400).json({ message: "Password is too short" });
+            return res.status(400).json({ message: "Password is too short (min 5 chars)" });
         }
-
-        // Validate Organization
         const organization = await Organization.findById(organization_id);
         if (!organization) {
             return res.status(400).json({ message: "Invalid Organization ID" });
+        }
+
+        if (organization.secret_code) {
+            if (!secret_code || secret_code !== organization.secret_code) {
+                return res.status(403).json({ message: "Invalid organization code — contact your organization admin." });
+            }
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { BookOpen, Users } from "lucide-react";
-import StatCard from "./StarCard";
+import StatCard from "./StatCard";
 import CourseCard from "./CourseCard";
 import { useAuth } from "../context/AuthContext";
 import EmptyView from "./EmptyView";
@@ -65,27 +65,27 @@ const InstructorDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900">
-                    Instructor Dashboard
-                  </h1>
-                  <p className="text-gray-600 mt-2 text-lg">
-                    View your assigned courses and track student progress
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+    <div className="min-h-screen bg-gray-50 pb-16">
+      {/* ── Gradient Hero Banner ── */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-500 to-indigo-600">
+        <div className="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-white/5" />
+        <div className="absolute -bottom-12 -left-12 w-52 h-52 rounded-full bg-white/5" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <p className="text-purple-100 text-sm font-medium mb-1 uppercase tracking-widest">
+              Instructor Dashboard
+            </p>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">
+              Hello, {userDetails?.username || "Instructor"}! 🎓
+            </h1>
+            <p className="text-purple-100 mt-2 text-base">
+              View your assigned courses and track student progress.
+            </p>
+          </motion.div>
         </div>
       </div>
 
@@ -101,13 +101,13 @@ const InstructorDashboard = () => {
             icon={BookOpen}
             title="Assigned Courses"
             value={instructorStats?.totalCourses || 0}
-            color="bg-blue-500"
+            color="purple"
           />
           <StatCard
             icon={Users}
             title="Total Students"
             value={instructorStats?.totalStudents || 0}
-            color="bg-green-500"
+            color="indigo"
           />
         </motion.div>
 
