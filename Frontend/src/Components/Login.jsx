@@ -139,7 +139,7 @@ const Login = () => {
   return (
     <>
       <Header />
-      <div className="min-h-[calc(100vh-64px)] bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
         {/* Background Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
@@ -151,7 +151,7 @@ const Login = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="bg-white rounded-3xl shadow-xl w-full max-w-5xl flex overflow-hidden min-h-[600px] z-10"
+          className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl w-full max-w-5xl flex overflow-hidden min-h-[600px] z-10"
         >
           {/* Left Side - Hero / Image */}
           <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-600 to-purple-700 relative flex-col justify-between p-12 text-white">
@@ -200,17 +200,17 @@ const Login = () => {
           </div>
 
           {/* Right Side - Forms */}
-          <div className="w-full md:w-1/2 p-8 sm:p-12 bg-white flex flex-col justify-center">
-            <div className="flex justify-center mb-8 bg-gray-100 p-1 rounded-xl self-center">
+          <div className="w-full md:w-1/2 p-8 sm:p-12 bg-white dark:bg-slate-800 flex flex-col justify-center">
+            <div className="flex justify-center mb-8 bg-gray-100 dark:bg-slate-700 p-1 rounded-xl self-center">
               <button
                 onClick={() => setActiveTab("login")}
-                className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeTab === "login" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeTab === "login" ? "bg-white dark:bg-slate-600 text-gray-900 dark:text-white shadow-sm" : "text-gray-500 dark:text-slate-400 hover:text-gray-700"}`}
               >
                 Log In
               </button>
               <button
                 onClick={() => setActiveTab("register")}
-                className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeTab === "register" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeTab === "register" ? "bg-white dark:bg-slate-600 text-gray-900 dark:text-white shadow-sm" : "text-gray-500 dark:text-slate-400 hover:text-gray-700"}`}
               >
                 Sign Up
               </button>
@@ -228,10 +228,10 @@ const Login = () => {
                     onSubmit={handleLoginSubmit}
                   >
                     <div className="text-center mb-6">
-                      <h3 className="text-2xl font-bold text-gray-900">
+                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                         Welcome Back!
                       </h3>
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 dark:text-slate-400">
                         Please enter your details.
                       </p>
                     </div>
@@ -250,7 +250,7 @@ const Login = () => {
                               email: e.target.value,
                             })
                           }
-                          className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                          className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-600 transition-all"
                         />
                       </div>
                     </div>
@@ -268,7 +268,7 @@ const Login = () => {
                               password: e.target.value,
                             })
                           }
-                          className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                          className="w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 dark:text-white dark:placeholder-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-slate-600 transition-all"
                         />
                         <button
                           type="button"

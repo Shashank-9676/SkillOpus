@@ -60,7 +60,7 @@ const StudentDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         <SyncLoader color="#3B82F6" size={15} margin={5} />
       </div>
     );
@@ -83,7 +83,7 @@ const StudentDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-16">
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600">
         <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5" />
         <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5" />
@@ -124,7 +124,7 @@ const StudentDashboard = () => {
 
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               Enrolled Courses
             </h2>
             {/* Could add search filter here */}

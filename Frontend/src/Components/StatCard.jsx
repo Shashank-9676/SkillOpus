@@ -54,7 +54,7 @@ const StatCard = ({ icon: Icon, title, value, color, trend }) => {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, boxShadow: "0 12px 32px -8px rgba(0,0,0,0.1)" }}
       transition={{ duration: 0.3 }}
-      className="relative bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden"
+      className="relative bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm overflow-hidden"
     >
       <div className={`h-1 w-full ${c.accent}`} />
 
@@ -73,17 +73,16 @@ const StatCard = ({ icon: Icon, title, value, color, trend }) => {
             </span>
           )}
         </div>
-          <div className="flex flex-col items-center">
-          <p className="text-3xl font-semibold text-gray-800 leading-none mb-1">
-          {value ?? 0}
-        </p>
+        <div className="flex flex-col items-center">
+          <p className="text-3xl font-semibold text-gray-800 dark:text-slate-100 leading-none mb-1">
+            {value ?? 0}
+          </p>
 
-        {/* Label */}
-        <p className="text-sm text-gray-400 font-medium tracking-wide">
-          {title}
-        </p>
-          </div>
-        
+          {/* Label */}
+          <p className="text-sm text-gray-400 dark:text-slate-400 font-medium tracking-wide">
+            {title}
+          </p>
+        </div>
       </div>
     </motion.div>
   );

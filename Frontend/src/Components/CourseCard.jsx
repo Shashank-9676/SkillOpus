@@ -186,7 +186,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -5, boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.1)" }}
       transition={{ duration: 0.3 }}
-      className="bg-white h-full rounded-2xl border border-gray-100 overflow-hidden shadow-sm flex flex-col group"
+      className="bg-white dark:bg-slate-800 h-full rounded-2xl border border-gray-100 dark:border-slate-700 overflow-hidden shadow-sm flex flex-col group"
     >
       {/* Course Image Header */}
       <div className="relative h-48 overflow-hidden">
@@ -217,18 +217,18 @@ const CourseCard = ({ course, onCourseUpdate }) => {
 
       {/* Course Body */}
       <div className="p-6 flex flex-col flex-grow">
-        <p className="text-gray-600 text-sm mb-6 line-clamp-2 leading-relaxed h-10">
+        <p className="text-gray-600 dark:text-slate-300 text-sm mb-6 line-clamp-2 leading-relaxed h-10">
           {course.description}
         </p>
 
         <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
           {userDetails?.role !== "instructor" && course.instructor && (
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-gray-600 dark:text-slate-300">
               <User className="w-4 h-4 mr-2 text-blue-500" />
               <span className="truncate">{course.instructor}</span>
             </div>
           )}
-          <div className="flex items-center text-gray-600 ml-auto">
+          <div className="flex items-center text-gray-600 dark:text-slate-300 ml-auto">
             <BarChart className="w-4 h-4 mr-2 text-purple-500" />
             <span className="first-letter:uppercase">
               {course.level || "All Levels"}
@@ -237,7 +237,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
         </div>
 
         {/* Action Footer */}
-        <div className="mt-auto pt-4 border-t border-gray-50">
+        <div className="mt-auto pt-4 border-t border-gray-50 dark:border-slate-700">
           {userDetails?.role === "admin" ? (
             <div className="flex space-x-2 justify-end">
               <motion.button
@@ -326,10 +326,12 @@ const CourseCard = ({ course, onCourseUpdate }) => {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
+              className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
             >
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-gray-900">Edit Course</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Edit Course
+                </h3>
                 <button
                   onClick={() => setIsEditing(false)}
                   className="text-gray-400 hover:text-gray-600"
@@ -341,7 +343,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
 
               <form onSubmit={handleEditCourse} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                     Title
                   </label>
                   <input
@@ -350,7 +352,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                     onChange={(e) =>
                       setFormData({ ...formData, title: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     required
                   />
                 </div>

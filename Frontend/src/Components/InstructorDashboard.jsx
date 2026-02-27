@@ -58,14 +58,14 @@ const InstructorDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         <SyncLoader color="#3B82F6" size={15} margin={5} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-16">
       {/* ── Gradient Hero Banner ── */}
       <div className="relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-500 to-indigo-600">
         <div className="absolute -top-16 -right-16 w-72 h-72 rounded-full bg-white/5" />
@@ -115,7 +115,7 @@ const InstructorDashboard = () => {
           {/* My Courses */}
           <div className="lg:col-span-3">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Assigned Courses
               </h2>
             </div>
