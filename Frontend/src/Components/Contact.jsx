@@ -160,20 +160,12 @@ const Contact = () => {
               <div className="space-y-5">
                 {contactInfo.map((c, i) => (
                   <div key={i} className="flex items-start gap-4">
-                    <div
-                      className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${c.color.split(" ").slice(0, 2).join(" ")}`}
-                    >
-                      <c.icon
-                        className={`w-5 h-5 ${c.color.split(" ").slice(2).join(" ")}`}
-                      />
+                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${c.color.split(" ").slice(0, 2).join(" ")}`}>
+                      <c.icon className={`w-5 h-5 ${c.color.split(" ").slice(2).join(" ")}`} />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-slate-500">
-                        {c.label}
-                      </p>
-                      <p className="text-gray-800 dark:text-slate-200 font-medium mt-0.5">
-                        {c.value}
-                      </p>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-slate-500">{c.label}</p>
+                      <p className="text-gray-800 dark:text-slate-200 font-medium mt-0.5">{c.value}</p>
                     </div>
                   </div>
                 ))}
@@ -185,8 +177,7 @@ const Contact = () => {
               <HelpCircle className="w-8 h-8 mb-3 opacity-80" />
               <h4 className="font-bold text-lg mb-1">Common Questions</h4>
               <p className="text-indigo-100 text-sm mb-4">
-                Want to know how to set up an organisation, enrol students, or
-                create courses? We cover it all.
+                Want to know how to set up an organisation, enrol students, or create courses? We cover it all.
               </p>
               <ul className="space-y-2 text-sm text-indigo-100">
                 <li className="flex items-center gap-2">

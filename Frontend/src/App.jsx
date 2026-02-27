@@ -1,4 +1,5 @@
 import Login from "./Components/Login";
+import Register from "./Components/Register";
 import Home from "./Components/Home";
 import Courses from "./Components/Courses";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
@@ -15,6 +16,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/"
           element={

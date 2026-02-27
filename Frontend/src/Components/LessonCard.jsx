@@ -1,13 +1,4 @@
-import {
-  Video,
-  FileText,
-  Edit,
-  Trash2,
-  CheckCircle,
-  Calendar,
-  PlayCircle,
-  ChevronRight,
-} from "lucide-react";
+import {Video,FileText,Edit,Trash2,CheckCircle,Calendar,PlayCircle,ChevronRight} from "lucide-react";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import VideoLesson from "./VideoLesson";

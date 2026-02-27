@@ -214,7 +214,7 @@ const Courses = () => {
                     setSearch("");
                     setLevel("All");
                   }}
-                  className="mt-5 inline-flex items-center gap-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-white text-sm font-semibold px-5 py-2.5 rounded-xl border border-gray-200 dark:border-white/15 transition-all"
+                  className="m-5 inline-flex items-center gap-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-white text-sm font-semibold px-5 py-2.5 rounded-xl border border-gray-200 dark:border-white/15 transition-all"
                 >
                   <X className="w-4 h-4" /> Clear filters
                 </button>
@@ -224,7 +224,7 @@ const Courses = () => {
                   onClick={() => setIsOpen(true)}
                   className="mt-6 inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-6 py-2.5 rounded-xl transition-all"
                 >
-                  <Plus className="w-4 h-4" /> Create First Course
+                  <Plus className="w-4 h-4" /> Create Course
                 </button>
               )}
             </motion.div>

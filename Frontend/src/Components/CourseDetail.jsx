@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import {
-  BookOpen,
-  Plus,
-  FileText,
-  Users,
-  CheckCircle,
-  ArrowLeft,
-  GraduationCap,
-  BarChart3,
-  Layers,
-} from "lucide-react";
+import {BookOpen,Plus,FileText,Users,CheckCircle,ArrowLeft,GraduationCap,BarChart3,Layers,} from "lucide-react";
 import Cookies from "js-cookie";
 import SyncLoader from "react-spinners/SyncLoader";
 import { Link, useParams, useNavigate } from "react-router";
@@ -80,9 +70,7 @@ const CourseDetail = () => {
       <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col items-center justify-center gap-4">
         <Header />
         <SyncLoader color="#6366f1" size={14} margin={5} />
-        <p className="text-sm text-gray-400 dark:text-slate-500">
-          Loading course…
-        </p>
+        <p className="text-sm text-gray-400 dark:text-slate-500">Loading course…</p>
       </div>
     );
   }
@@ -330,19 +318,12 @@ const CourseDetail = () => {
                   <div className="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <FileText className="w-8 h-8 text-gray-400 dark:text-slate-500" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                    No lessons yet
-                  </h3>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">No lessons yet</h3>
                   <p className="text-gray-500 dark:text-slate-400 text-sm mb-6">
-                    {isStudent
-                      ? "Lessons will appear here once your instructor adds them."
-                      : "Start building your course by adding the first lesson."}
+                    {isStudent ? "Lessons will appear here once your instructor adds them.": "Start building your course by adding the first lesson."}
                   </p>
                   {!isStudent && (
-                    <button
-                      onClick={() => setShowAddLessonForm(true)}
-                      className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-5 py-2.5 rounded-xl transition-colors"
-                    >
+                    <button onClick={() => setShowAddLessonForm(true)} className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-5 py-2.5 rounded-xl transition-colors">
                       <Plus className="w-4 h-4" /> Add First Lesson
                     </button>
                   )}

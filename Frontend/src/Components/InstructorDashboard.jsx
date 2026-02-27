@@ -5,7 +5,6 @@ import StatCard from "./StatCard";
 import CourseCard from "./CourseCard";
 import { useAuth } from "../context/AuthContext";
 import EmptyView from "./EmptyView";
-import { toast } from "react-toastify";
 import SyncLoader from "react-spinners/SyncLoader";
 import { motion } from "framer-motion";
 

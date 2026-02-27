@@ -1,19 +1,4 @@
-import {
-  GraduationCap,
-  Target,
-  Users,
-  Award,
-  BookOpen,
-  Lightbulb,
-  Heart,
-  Building2,
-  TrendingUp,
-  CheckCircle,
-  ArrowRight,
-  ShieldCheck,
-  Video,
-  BarChart3,
-} from "lucide-react";
+import {GraduationCap,Target,Users,Award,BookOpen,Lightbulb,Heart,Building2,TrendingUp,ArrowRight,ShieldCheck,Video,BarChart3,} from "lucide-react";
 import { useNavigate } from "react-router";
 import Header from "./Header";
 import { motion } from "framer-motion";
@@ -42,29 +27,25 @@ const About = () => {
       icon: Target,
       color: "from-blue-500 to-indigo-500",
       title: "Organisation-First",
-      description:
-        "SkillOpus is built for organisations to manage their own learning ecosystems — from enrolling learners to tracking progress.",
+      description: "SkillOpus is built for organisations to manage their own learning ecosystems — from enrolling learners to tracking progress.",
     },
     {
       icon: Lightbulb,
       color: "from-violet-500 to-purple-600",
       title: "Structured Learning",
-      description:
-        "Courses are broken into focused lessons. Instructors can add video, text, and quizzes so every learner gets a consistent, complete experience.",
+      description: "Courses are broken into focused lessons. Instructors can add video, text, and quizzes so every learner gets a consistent, complete experience.",
     },
     {
       icon: Heart,
       color: "from-pink-500 to-rose-500",
       title: "Learner-Centric",
-      description:
-        "Progress tracking, status dashboards, and easy enrolment keep learners engaged and give admins real visibility into outcomes.",
+      description: "Progress tracking, status dashboards, and easy enrolment keep learners engaged and give admins real visibility into outcomes.",
     },
     {
       icon: ShieldCheck,
       color: "from-emerald-500 to-teal-500",
       title: "Role-Based Access",
-      description:
-        "Admins, instructors, and students each have a dedicated portal with the exact permissions they need — nothing more, nothing less.",
+      description: "Admins, instructors, and students each have a dedicated portal with the exact permissions they need — nothing more, nothing less.",
     },
   ];
 
@@ -95,8 +76,8 @@ const About = () => {
   const team = [
     {
       initials: "SS",
-      name: "Shashank S.",
-      role: "Full-Stack Engineer",
+      name: "Shashank P.",
+      role: "Full-Stack Developer",
       gradient: "from-blue-500 to-indigo-600",
       bio: "Built SkillOpus end-to-end with React, Node.js, Express & MongoDB.",
     },

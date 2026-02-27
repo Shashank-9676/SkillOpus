@@ -406,19 +406,8 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                   </div>
                 )}
                 <div className="flex justify-end gap-3 mt-8">
-                  <button
-                    type="button"
-                    onClick={() => setIsEditing(false)}
-                    className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors font-medium"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:shadow-lg transition-all font-medium transform hover:scale-105"
-                  >
-                    Save Changes
-                  </button>
+                  <button type="button" onClick={() => setIsEditing(false)} className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors font-medium">Cancel</button>
+                  <button type="submit" className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:shadow-lg transition-all font-medium transform hover:scale-105">Save Changes</button>
                 </div>
               </form>
             </motion.div>
