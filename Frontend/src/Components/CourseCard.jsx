@@ -180,138 +180,143 @@ const CourseCard = ({ course, onCourseUpdate }) => {
   const currentStatus = course.status || "draft";
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5, boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.1)" }}
-      transition={{ duration: 0.3 }}
-      className="bg-white dark:bg-slate-800 h-full rounded-2xl border border-gray-100 dark:border-slate-700 overflow-hidden shadow-sm flex flex-col group"
-    >
-      {/* Course Image Header */}
-      <div className="relative h-48 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 group-hover:scale-105 transition-transform duration-500">
-          {/* Placeholder pattern/image */}
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-400 via-gray-900 to-black"></div>
-        </div>
+    <>
+      <motion.div
+        layout
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{
+          y: -5,
+          boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.1)",
+        }}
+        transition={{ duration: 0.3 }}
+        className="bg-white dark:bg-slate-800 h-full rounded-2xl border border-gray-100 dark:border-slate-700 overflow-hidden shadow-sm flex flex-col group"
+      >
+        {/* Course Image Header */}
+        <div className="relative h-48 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 group-hover:scale-105 transition-transform duration-500">
+            {/* Placeholder pattern/image */}
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-400 via-gray-900 to-black"></div>
+          </div>
 
-        {/* Helper Badge */}
-        <div className="absolute top-4 right-4 z-10">
-          <span
-            className={`px-3 py-1 text-xs font-bold rounded-full border shadow-sm uppercase tracking-wide ${getStatusBadge(currentStatus)}`}
-          >
-            {currentStatus}
-          </span>
-        </div>
-
-        {/* Content Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
-          <span className="inline-block px-2 py-1 mb-2 text-xs font-semibold text-blue-100 bg-blue-500/20 backdrop-blur-sm rounded-md border border-blue-400/30">
-            {course.category || "General"}
-          </span>
-          <h3 className="text-white text-xl font-bold leading-tight line-clamp-2 drop-shadow-sm">
-            {course.title}
-          </h3>
-        </div>
-      </div>
-
-      {/* Course Body */}
-      <div className="p-6 flex flex-col flex-grow">
-        <p className="text-gray-600 dark:text-slate-300 text-sm mb-6 line-clamp-2 leading-relaxed h-10">
-          {course.description}
-        </p>
-
-        <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
-          {userDetails?.role !== "instructor" && course.instructor && (
-            <div className="flex items-center text-gray-600 dark:text-slate-300">
-              <User className="w-4 h-4 mr-2 text-blue-500" />
-              <span className="truncate">{course.instructor}</span>
-            </div>
-          )}
-          <div className="flex items-center text-gray-600 dark:text-slate-300 ml-auto">
-            <BarChart className="w-4 h-4 mr-2 text-purple-500" />
-            <span className="first-letter:uppercase">
-              {course.level || "All Levels"}
+          {/* Helper Badge */}
+          <div className="absolute top-4 right-4 z-10">
+            <span
+              className={`px-3 py-1 text-xs font-bold rounded-full border shadow-sm uppercase tracking-wide ${getStatusBadge(currentStatus)}`}
+            >
+              {currentStatus}
             </span>
+          </div>
+
+          {/* Content Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+            <span className="inline-block px-2 py-1 mb-2 text-xs font-semibold text-blue-100 bg-blue-500/20 backdrop-blur-sm rounded-md border border-blue-400/30">
+              {course.category || "General"}
+            </span>
+            <h3 className="text-white text-xl font-bold leading-tight line-clamp-2 drop-shadow-sm">
+              {course.title}
+            </h3>
           </div>
         </div>
 
-        {/* Action Footer */}
-        <div className="mt-auto pt-4 border-t border-gray-50 dark:border-slate-700">
-          {userDetails?.role === "admin" ? (
-            <div className="flex space-x-2 justify-end">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
-                onClick={viewDetails}
-                title="View Details"
-              >
-                <Eye className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-xl transition-colors"
-                onClick={() => setIsEditing(true)}
-                title="Edit"
-              >
-                <Edit className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
-                onClick={handleDeleteCourse}
-                title="Delete"
-              >
-                <Trash2 className="w-5 h-5" />
-              </motion.button>
+        {/* Course Body */}
+        <div className="p-6 flex flex-col flex-grow">
+          <p className="text-gray-600 dark:text-slate-300 text-sm mb-6 line-clamp-2 leading-relaxed h-10">
+            {course.description}
+          </p>
+
+          <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
+            {userDetails?.role !== "instructor" && course.instructor && (
+              <div className="flex items-center text-gray-600 dark:text-slate-300">
+                <User className="w-4 h-4 mr-2 text-blue-500" />
+                <span className="truncate">{course.instructor}</span>
+              </div>
+            )}
+            <div className="flex items-center text-gray-600 dark:text-slate-300 ml-auto">
+              <BarChart className="w-4 h-4 mr-2 text-purple-500" />
+              <span className="first-letter:uppercase">
+                {course.level || "All Levels"}
+              </span>
             </div>
-          ) : userDetails?.role === "instructor" ? (
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm hover:shadow-md transition-all flex items-center justify-center space-x-2"
-              onClick={viewDetails}
-            >
-              <BookOpen className="w-4 h-4" />
-              <span>Manage Course</span>
-            </motion.button>
-          ) : (
-            <div className="w-full">
-              {!course.course_id && !course.status ? (
+          </div>
+
+          {/* Action Footer */}
+          <div className="mt-auto pt-4 border-t border-gray-50 dark:border-slate-700">
+            {userDetails?.role === "admin" ? (
+              <div className="flex space-x-2 justify-end">
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-md hover:shadow-lg transition-all"
-                  onClick={enrollment}
-                >
-                  Enroll Now
-                </motion.button>
-              ) : course.status === "pending" ? (
-                <button
-                  className="w-full bg-yellow-50 text-yellow-700 border border-yellow-200 px-4 py-2.5 rounded-xl font-medium cursor-not-allowed flex items-center justify-center space-x-2"
-                  disabled
-                >
-                  <Clock className="w-4 h-4" />
-                  <span>Approval Pending</span>
-                </button>
-              ) : (
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-white text-blue-600 border border-blue-200 px-4 py-2.5 rounded-xl font-semibold hover:bg-blue-50 transition-all flex items-center justify-center space-x-2"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
                   onClick={viewDetails}
+                  title="View Details"
                 >
-                  <BookOpen className="w-4 h-4" />
-                  <span>Continue Learning</span>
+                  <Eye className="w-5 h-5" />
                 </motion.button>
-              )}
-            </div>
-          )}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-xl transition-colors"
+                  onClick={() => setIsEditing(true)}
+                  title="Edit"
+                >
+                  <Edit className="w-5 h-5" />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                  onClick={handleDeleteCourse}
+                  title="Delete"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </motion.button>
+              </div>
+            ) : userDetails?.role === "instructor" ? (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2.5 rounded-xl font-medium shadow-sm hover:shadow-md transition-all flex items-center justify-center space-x-2"
+                onClick={viewDetails}
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Manage Course</span>
+              </motion.button>
+            ) : (
+              <div className="w-full">
+                {!course.course_id && !course.status ? (
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2.5 rounded-xl font-medium shadow-md hover:shadow-lg transition-all"
+                    onClick={enrollment}
+                  >
+                    Enroll Now
+                  </motion.button>
+                ) : course.status === "pending" ? (
+                  <button
+                    className="w-full bg-yellow-50 text-yellow-700 border border-yellow-200 px-4 py-2.5 rounded-xl font-medium cursor-not-allowed flex items-center justify-center space-x-2"
+                    disabled
+                  >
+                    <Clock className="w-4 h-4" />
+                    <span>Approval Pending</span>
+                  </button>
+                ) : (
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full bg-white text-blue-600 border border-blue-200 px-4 py-2.5 rounded-xl font-semibold hover:bg-blue-50 transition-all flex items-center justify-center space-x-2"
+                    onClick={viewDetails}
+                  >
+                    <BookOpen className="w-4 h-4" />
+                    <span>Continue Learning</span>
+                  </motion.button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Edit Modal */}
       <AnimatePresence>
@@ -320,7 +325,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
           >
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
@@ -334,10 +339,23 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                 </h3>
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-slate-300"
                 >
-                  <Trash2 className="w-5 h-5 rotate-45" />{" "}
-                  {/* Using Trash2 as X icon/Close */}
+                  <Trash2 className="w-5 h-5 auto cursor-pointer text-gray-400 hover:text-red-500 transition-colors hidden" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                  </svg>
                 </button>
               </div>
 
@@ -357,7 +375,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                     Description
                   </label>
                   <textarea
@@ -365,14 +383,14 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                     onChange={(e) =>
                       setFormData({ ...formData, description: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     rows="4"
                     required
                   />
                 </div>
                 {userDetails?.role === "admin" && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                       Instructor
                     </label>
                     <CustomSelect
@@ -389,7 +407,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                 {(userDetails?.role === "admin" ||
                   userDetails?.role === "instructor") && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                       Status
                     </label>
                     <select
@@ -397,7 +415,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                       onChange={(e) =>
                         setFormData({ ...formData, status: e.target.value })
                       }
-                      className="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="draft">Draft</option>
                       <option value="active">Active</option>
@@ -406,15 +424,26 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                   </div>
                 )}
                 <div className="flex justify-end gap-3 mt-8">
-                  <button type="button" onClick={() => setIsEditing(false)} className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors font-medium">Cancel</button>
-                  <button type="submit" className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:shadow-lg transition-all font-medium transform hover:scale-105">Save Changes</button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="px-4 py-2 text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:shadow-lg transition-all font-medium transform hover:scale-105"
+                  >
+                    Save Changes
+                  </button>
                 </div>
               </form>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </>
   );
 };
 

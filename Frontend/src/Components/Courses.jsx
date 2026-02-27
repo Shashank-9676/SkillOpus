@@ -79,10 +79,14 @@ const Courses = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col">
         <Header />
-        <SyncLoader color="#6366f1" size={14} margin={5} />
-        <p className="text-sm text-gray-400">Loading courses…</p>
+        <div className="flex-1 flex flex-col items-center justify-center gap-4">
+          <SyncLoader color="#6366f1" size={14} margin={5} />
+          <p className="text-sm text-gray-400 dark:text-slate-500">
+            Loading courses...
+          </p>
+        </div>
       </div>
     );
   }
