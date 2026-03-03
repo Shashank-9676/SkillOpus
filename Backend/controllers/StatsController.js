@@ -68,7 +68,7 @@ export const getLessonStats = async (req, res) => {
         const course = await Course.findById(courseId);
         const totalLessons = course ? course.lessons.length : 0;
 
-        const enrolledStudents = await Enrollment.distinct('student', { course: courseId, status: 'active' });
+        const enrolledStudents = await Enrollment.distinct('student', { course: courseId, status: { $ne: 'dropped' } });
 
         res.json({
             details: {

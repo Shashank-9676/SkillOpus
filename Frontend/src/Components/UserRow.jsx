@@ -65,6 +65,24 @@ const UserRow = ({ user }) => {
   const role = roleMeta[user.user_type] || roleMeta.student;
   const RoleIcon = role.icon;
   const isActive = user.status === "active";
+  const statusLabel =
+    user.status === "active"
+      ? "Active"
+      : user.status === "pending"
+        ? "Pending"
+        : "Dropped";
+  const statusColor =
+    user.status === "active"
+      ? "bg-green-100 text-green-700"
+      : user.status === "pending"
+        ? "bg-amber-100 text-amber-700"
+        : "bg-red-100 text-red-600";
+  const dotColor =
+    user.status === "active"
+      ? "bg-green-500"
+      : user.status === "pending"
+        ? "bg-amber-500"
+        : "bg-red-500";
 
   return (
     <>
@@ -110,16 +128,10 @@ const UserRow = ({ user }) => {
         {/* Status badge */}
         <td className="px-5 py-4 whitespace-nowrap">
           <span
-            className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg ${
-              isActive
-                ? "bg-green-100 text-green-700"
-                : "bg-amber-100 text-amber-700"
-            }`}
+            className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg ${statusColor}`}
           >
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-green-500" : "bg-amber-500"}`}
-            />
-            {isActive ? "Active" : "Inactive"}
+            <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`} />
+            {statusLabel}
           </span>
         </td>
 
@@ -200,7 +212,7 @@ const UserRow = ({ user }) => {
                     <button
                       onClick={() =>
                         handleStatusChange(
-                          confirm === "activate" ? "active" : "inactive",
+                          confirm === "activate" ? "active" : "dropped",
                         )
                       }
                       className={`px-5 py-2.5 text-sm font-semibold text-white rounded-xl transition-colors ${

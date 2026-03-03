@@ -284,7 +284,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
               </motion.button>
             ) : (
               <div className="w-full">
-                {!course.course_id && !course.status ? (
+                {!course.course_id ? (
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -293,7 +293,7 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                   >
                     Enroll Now
                   </motion.button>
-                ) : course.status === "pending" ? (
+                ) : course.enrollment_status === "pending" ? (
                   <button
                     className="w-full bg-yellow-50 text-yellow-700 border border-yellow-200 px-4 py-2.5 rounded-xl font-medium cursor-not-allowed flex items-center justify-center space-x-2"
                     disabled

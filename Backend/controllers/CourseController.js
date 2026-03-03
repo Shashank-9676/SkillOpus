@@ -14,11 +14,28 @@ export const getAllCourses = async (req, res) => {
 
         const courses = await Course.find(query).populate('instructor', 'username').lean();
 
-        const formattedCourses = courses.map(course => ({
-            ...course,
-            instructor: course.instructor ? course.instructor.username : 'Unknown',
-            instructor_id: course.instructor ? course.instructor._id : null
-        }));
+        let enrollmentMap = {};
+        if (req.user.role === 'student') {
+            const enrollments = await Enrollment.find({ student: req.user.id }).lean();
+            enrollments.forEach(e => {
+                enrollmentMap[e.course.toString()] = e.status;
+            });
+        }
+
+        const formattedCourses = courses.map(course => {
+            const obj = {
+                ...course,
+                instructor: course.instructor ? course.instructor.username : 'Unknown',
+                instructor_id: course.instructor ? course.instructor._id : null
+            };
+            if (req.user.role === 'student') {
+                const enrollStatus = enrollmentMap[course._id.toString()];
+                // course_id signals "already enrolled", status holds the enrollment status
+                obj.course_id = enrollStatus ? course._id : null;
+                obj.enrollment_status = enrollStatus || null;
+            }
+            return obj;
+        });
 
         res.status(200).json({ status: "success", details: formattedCourses });
     } catch (error) {
