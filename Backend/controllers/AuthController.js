@@ -20,7 +20,7 @@ export const register = async (req, res) => {
             return res.status(400).json({ message: "Invalid Organization ID" });
         }
 
-        if (organization.secret_code) {
+        if (!user_type === 'student' && organization.secret_code) {
             if (!secret_code || secret_code !== organization.secret_code) {
                 return res.status(403).json({ message: "Invalid organization code — contact your organization admin." });
             }
