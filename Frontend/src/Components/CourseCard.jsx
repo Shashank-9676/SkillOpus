@@ -15,7 +15,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 
-const CourseCard = ({ course, onCourseUpdate }) => {
+const CourseCard = ({ course, onCourseUpdate, isEnrolled = false }) => {
   const { userDetails } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
@@ -284,7 +284,27 @@ const CourseCard = ({ course, onCourseUpdate }) => {
               </motion.button>
             ) : (
               <div className="w-full">
-                {!course.course_id ? (
+                {isEnrolled || course.course_id ? (
+                  course.enrollment_status === "pending" ? (
+                    <button
+                      className="w-full bg-yellow-50 text-yellow-700 border border-yellow-200 px-4 py-2.5 rounded-xl font-medium cursor-not-allowed flex items-center justify-center space-x-2"
+                      disabled
+                    >
+                      <Clock className="w-4 h-4" />
+                      <span>Approval Pending</span>
+                    </button>
+                  ) : (
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full bg-white text-blue-600 border border-blue-200 px-4 py-2.5 rounded-xl font-semibold hover:bg-blue-50 transition-all flex items-center justify-center space-x-2"
+                      onClick={viewDetails}
+                    >
+                      <BookOpen className="w-4 h-4" />
+                      <span>Continue Learning</span>
+                    </motion.button>
+                  )
+                ) : (
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -292,24 +312,6 @@ const CourseCard = ({ course, onCourseUpdate }) => {
                     onClick={enrollment}
                   >
                     Enroll Now
-                  </motion.button>
-                ) : course.enrollment_status === "pending" ? (
-                  <button
-                    className="w-full bg-yellow-50 text-yellow-700 border border-yellow-200 px-4 py-2.5 rounded-xl font-medium cursor-not-allowed flex items-center justify-center space-x-2"
-                    disabled
-                  >
-                    <Clock className="w-4 h-4" />
-                    <span>Approval Pending</span>
-                  </button>
-                ) : (
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full bg-white text-blue-600 border border-blue-200 px-4 py-2.5 rounded-xl font-semibold hover:bg-blue-50 transition-all flex items-center justify-center space-x-2"
-                    onClick={viewDetails}
-                  >
-                    <BookOpen className="w-4 h-4" />
-                    <span>Continue Learning</span>
                   </motion.button>
                 )}
               </div>

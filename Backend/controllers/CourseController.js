@@ -118,15 +118,9 @@ export const getCourseByStudent = async (req, res) => {
 
 export const createCourse = async (req, res) => {
     try {
-        const { title, description, category, instructor_id, level, created_by, status } = req.body;
+        const { title, description, category, instructor_id, level, status } = req.body;
         const organization_id = req.user.organization_id;
-
-        // Verify creator is admin
-        console.log(created_by);
-        const creator = await User.findById(created_by);
-        if (!creator || creator.user_type !== 'admin') {
-            return res.status(403).send({ message: "Only admins can create courses" });
-        }
+        const created_by = req.user.id;
 
         const newCourse = new Course({
             title,

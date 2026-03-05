@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const lessonProgressSchema = new mongoose.Schema({
     lesson_id: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: 'Lesson',
         required: true
     },
     status: {

@@ -145,7 +145,11 @@ const StudentDashboard = () => {
                   variants={itemVariants}
                   className="h-full"
                 >
-                  <CourseCard course={course} onCourseUpdate={fetchMyCourses} />
+                  <CourseCard
+                    course={course}
+                    onCourseUpdate={fetchMyCourses}
+                    isEnrolled={true}
+                  />
                 </motion.div>
               ))}
             </motion.div>
