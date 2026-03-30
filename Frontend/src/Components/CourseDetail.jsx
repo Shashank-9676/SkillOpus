@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import {
-  BookOpen,
-  Plus,
-  FileText,
-  Users,
-  CheckCircle,
-  ArrowLeft,
-  GraduationCap,
-  BarChart3,
-  Layers,
-} from "lucide-react";
+import { BookOpen, Plus, FileText, Users, CheckCircle, ArrowLeft, GraduationCap, BarChart3, Layers } from "lucide-react";
 import Cookies from "js-cookie";
 import SyncLoader from "react-spinners/SyncLoader";
 import { Link, useParams, useNavigate } from "react-router";
@@ -23,10 +13,8 @@ import { motion, AnimatePresence } from "framer-motion";
 const api = import.meta.env.VITE_API_URL;
 
 const LEVEL_COLORS = {
-  beginner:
-    "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300",
-  intermediate:
-    "bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300",
+  beginner: "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300",
+  intermediate: "bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300",
   advanced: "bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-300",
 };
 
@@ -54,7 +42,7 @@ const CourseDetail = () => {
       if (courseRes.ok) setCourseData((await courseRes.json()).details);
       if (lessonsRes.ok) setLessons((await lessonsRes.json()).details);
       if (statsRes.ok) setStats((await statsRes.json()).details);
-
+      console.log(statsRes)
       if (userDetails?.role === "student") {
         const progRes = await fetch(
           `${api}/progress/course/${id}/user/${userDetails.id}`,

@@ -40,7 +40,6 @@ const Header = () => {
       icon: BookOpen,
       href: "/courses",
     };
-    const contactItem = { label: "Contact Us", icon: Mail, href: "/contact" };
     const aboutItem = { label: "About Us", icon: Users, href: "/about" };
     const orgItem = {
       label: "Organizations",
@@ -49,10 +48,10 @@ const Header = () => {
     };
 
     if (!userDetails) {
-      return [orgItem, aboutItem, contactItem];
+      return [orgItem, aboutItem];
     }
 
-    return [dashboardItem, coursesItem, contactItem, aboutItem];
+    return [dashboardItem, coursesItem, aboutItem];
   };
 
   const navItems = getNavItems();
@@ -167,7 +166,7 @@ const Header = () => {
                       {userDetails.username}
                     </p>
                     <p className="text-[10px] font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                      {userDetails.role}
+                      {userDetails?.user_type}
                     </p>
                   </div>
                 </motion.button>

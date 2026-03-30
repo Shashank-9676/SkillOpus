@@ -202,7 +202,7 @@ export const getCourseProgress = async (req, res) => {
             const enrollments = await Enrollment.find({ course: course_id }).populate('student');
 
             const usersProgress = enrollments.map(e => {
-                const completedCount = e.progress.filter(p => p.status).length; // Assuming status is truthy for complete
+                const completedCount = e.progress.filter(p => p.status).length;
                 return {
                     user_id: e.student._id,
                     username: e.student.username,

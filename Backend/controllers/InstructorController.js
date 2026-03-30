@@ -14,7 +14,7 @@ export const getAllInstructors = async (req, res) => {
 
 export const addInstructor = async (req, res) => {
     try {
-        const { instructor_id, department } = req.body; // instructor_id is User ID here
+        const { instructor_id, department } = req.body;
 
         const user = await User.findById(instructor_id);
         if (!user) return res.status(404).json({ message: "User not found" });
