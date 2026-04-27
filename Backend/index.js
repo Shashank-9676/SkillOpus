@@ -25,6 +25,7 @@ import progressRoutes from './routes/ProgressRoutes.js';
 import optionsRoutes from './routes/OptionsRoutes.js';
 import instructorRoutes from './routes/InstructorRoutes.js';
 import organizationRoutes from './routes/OrganizationRoutes.js';
+import interviewRoutes from './routes/InterviewRoutes.js';
 
 app.use('/api/', authRoutes);
 app.use('/courses/', courseRoutes);
@@ -34,6 +35,7 @@ app.use('/progress/', progressRoutes);
 app.use('/form/', optionsRoutes);
 app.use('/instructors/', instructorRoutes);
 app.use('/organizations/', organizationRoutes);
+app.use('/interview/', interviewRoutes);
 
 
 const PORT = process.env.PORT || 3000;

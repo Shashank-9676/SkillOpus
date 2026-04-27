@@ -1,17 +1,5 @@
 import { useState } from "react";
-import {
-  BarChart3,
-  Menu,
-  X,
-  Mail,
-  LogIn,
-  LogOut,
-  BookOpen,
-  Users,
-  Building2,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { BarChart3, Menu, X, LogIn, LogOut, BookOpen, Users, Building2, Sun, Moon, BrainCircuit,} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useNavigate, Link, useLocation } from "react-router";
@@ -47,11 +35,13 @@ const Header = () => {
       href: "/organizations",
     };
 
+    const interviewItem = { label: "Interview", icon: BrainCircuit, href: "/interview" };
+
     if (!userDetails) {
       return [orgItem, aboutItem];
     }
 
-    return [dashboardItem, coursesItem, aboutItem];
+    return [dashboardItem, coursesItem, interviewItem, aboutItem];
   };
 
   const navItems = getNavItems();

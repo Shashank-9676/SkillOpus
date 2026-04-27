@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import NotFound from "./Components/NotFound";
 import Organizations from "./Components/Organizations";
 import ScrollToTop from "./Components/ScrollToTop";
+import InterviewPage from "./Components/InterviewPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/progress/:id" element={<ProtectedRoute><StudentProgress /></ProtectedRoute>} />
         <Route path="/about" element={<About />} />
         <Route path="/organizations" element={<Organizations />} />
+        <Route path="/interview" element={<ProtectedRoute><InterviewPage /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer theme="colored" />
