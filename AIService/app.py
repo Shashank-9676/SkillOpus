@@ -315,6 +315,6 @@ def get_feedback():
             return jsonify({"error": "RATE_LIMIT", "details": str(exc)}), 429
         return jsonify({"error": str(exc)}), 500
 
-
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
